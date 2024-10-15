@@ -1,2 +1,2 @@
-# upwork-bidder
-AI powered system, that will make your Upwork biding fast, consistent and high-quality. 
+# Upwork Bidder
+The AI-powered system that will make your Upwork bidding fast, consistent, and high-quality. 

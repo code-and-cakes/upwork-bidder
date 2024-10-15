@@ -1,15 +1,15 @@
 services:
-  scrubify_postgres:
+  upwork-bidder:
     image: postgres
     restart: always
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=scrubify
+      - POSTGRES_DB=upwork-bidder
     ports:
       - "5432:5432"
     volumes:
-      - scrubify_postgres:/var/lib/postgresql/data
+      - upwork-bidder_postgres:/var/lib/postgresql/data
 volumes:
-  scrubify_postgres:
+  upwork-bidder_postgres:
     driver: local

@@ -1,0 +1,15 @@
+services:
+  scrubify_postgres:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=scrubify
+    ports:
+      - "5432:5432"
+    volumes:
+      - scrubify_postgres:/var/lib/postgresql/data
+volumes:
+  scrubify_postgres:
+    driver: local

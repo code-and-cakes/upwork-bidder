@@ -1,6 +1,7 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
+import { AutomationModule } from './automation/automation.module';
 import { GlobalModule } from './global';
 import { LoggerMiddleware } from './shared/middlewares';
 
@@ -11,6 +12,7 @@ import { LoggerMiddleware } from './shared/middlewares';
       load: [],
     }),
     GlobalModule,
+    AutomationModule,
   ],
 })
 export class AppModule {

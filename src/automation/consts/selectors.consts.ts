@@ -11,6 +11,9 @@ export const SELECTORS = {
     },
   },
   job: {
+    el: {
+      jobCard: 'article[data-test="JobTile"]',
+    },
     btn: {
       apply: 'button[data-cy="submit-proposal-button"]',
     },

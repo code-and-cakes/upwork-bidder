@@ -1,12 +1,16 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 
-export function writeToFile(obj: object, fileName: string): void {
+export function writeObjToFile(obj: object, fileName: string): void {
   const jsonString = JSON.stringify(obj, null, 2);
 
-  const dest = path.resolve(__dirname, `../../../../logs/${fileName}.json`);
+  writeToFile(jsonString, `${fileName}.json`);
+}
 
-  fs.writeFile(dest, jsonString, (err) => {
+export function writeToFile(content: string, fileName: string): void {
+  const dest = path.resolve(__dirname, `../../../../logs/${fileName}`);
+
+  fs.writeFile(dest, content, (err) => {
     if (err) {
       console.error('Error writing to file', err);
     } else {

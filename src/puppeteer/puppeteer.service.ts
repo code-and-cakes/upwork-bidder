@@ -60,6 +60,10 @@ export class PuppeteerService implements OnModuleDestroy {
     }, values);
   }
 
+  getHTML() {
+    return this.page.content();
+  }
+
   // Cookies
   async saveCookies() {
     const cookies = await this.page.cookies();

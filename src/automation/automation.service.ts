@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
+import { JobsService } from '../jobs/jobs.service';
+import { Job } from '../jobs/types/job.types';
 import { PuppeteerService } from '../puppeteer/puppeteer.service';
 import { wait } from '../shared/lib/wait';
 import { LOCAL_STORAGE_VALUES } from './consts/localStorage.consts';
@@ -8,12 +10,18 @@ import { UPWORK_URL } from './consts/upwork-urls.consts';
 import { testSearchSuit1 } from './data/test-search-suit-1';
 import { getJobSearchLink } from './lib/getJobSearchLink';
 import { getJobSearchParams } from './lib/getJobSearchParams';
+import { parseJobInfo } from './lib/parseJobInfo';
 import { parseJobs } from './lib/parseJobs';
 import { JobSearchParams } from './types/job.types';
 
 @Injectable()
 export class AutomationService {
-  constructor(private readonly ui: PuppeteerService) {
+  private isLoginActive = false;
+
+  constructor(
+    private readonly ui: PuppeteerService,
+    private readonly jobsService: JobsService,
+  ) {
     this.ui.authFn = this.login.bind(this);
     this.ui.init().then(() => this.start());
   }
@@ -25,33 +33,21 @@ export class AutomationService {
     console.log('Navigating to:', url);
     await this.ui.navigateTo(url);
     const html = await this.ui.getHTML();
-    const jobs = parseJobs(html);
+    const parsedJobs = parseJobs(html);
+    const dbJobs = await this.jobsService.createMany(parsedJobs);
+    console.log(dbJobs);
   }
 
-  async openJobInNewTab(link: string) {
-    await this.ui.click(link);
-  }
+  async applyForJob(job: Job) {
+    await this.ui.navigateTo(job.link);
+    await this.ui.scrollDownAndUp();
 
-  async applyForJob() {
-    // todo: scroll the page by 600px until bottom
-    await wait(2000);
-    await this.ui.scroll(600);
-    await wait(2000);
-    await this.ui.scroll(600);
-    await wait(2000);
-    await this.ui.scroll(-1200);
-    await wait(200);
+    const html = await this.ui.getHTML();
+    const parsedJobInfo = parseJobInfo(html);
 
     await this.ui.click(SELECTORS.job.btn.apply);
 
-    // * close modal
-    try {
-      await this.ui.click(SELECTORS.common.btn.modalClose).catch();
-    } catch (e) {
-      console.log(e);
-    }
-
-    await wait(2000);
+    await this.ui.waitForElement(SELECTORS.bidding.input.coverLetter, 10000);
 
     await this.ui.scrollIntoView(SELECTORS.bidding.input.coverLetter);
     await this.ui.type(
@@ -62,11 +58,23 @@ export class AutomationService {
 
   async start() {
     await this.ui.navigateTo(UPWORK_URL.bestMatches);
-    await this.findJobs(testSearchSuit1);
+    await wait(1000);
+    await this.waitForLogin();
+
+    // await this.findJobs(testSearchSuit1);
+    // return;
+
+    const job = await this.jobsService.findOne(
+      'e9abbaae-72d0-45e5-97a7-2c29ae152300',
+    );
+
+    await this.applyForJob(job);
   }
 
+  // Auth
   private async login() {
     console.log('Logging in...');
+    this.isLoginActive = true;
 
     await this.ui.setToLocalStorage(LOCAL_STORAGE_VALUES);
 
@@ -79,6 +87,9 @@ export class AutomationService {
     await this.ui.click(SELECTORS.login.btn.login);
 
     try {
+      await wait(3000);
+      await this.ui.click(SELECTORS.login.input.secret);
+      await wait(1000);
       await this.ui.type(
         SELECTORS.login.input.secret,
         process.env.UPWORK_SECRET,
@@ -87,5 +98,17 @@ export class AutomationService {
     } catch {}
 
     await this.ui.saveCookies();
+    this.isLoginActive = false;
+  }
+
+  private waitForLogin() {
+    return new Promise((resolve) => {
+      const interval = setInterval(() => {
+        if (!this.isLoginActive) {
+          clearInterval(interval);
+          resolve(true);
+        }
+      }, 1000);
+    });
   }
 }

@@ -111,6 +111,7 @@ export class PuppeteerService implements OnModuleDestroy {
 
   async navigateTo(url: string) {
     await this.page.goto(url, { waitUntil: 'networkidle0' });
+    await wait(500);
   }
 
   async click(selector: string) {
@@ -174,6 +175,35 @@ export class PuppeteerService implements OnModuleDestroy {
       });
     }, pixels);
     await wait(Math.random() * 500 + 200);
+  }
+
+  async scrollDownAndUp() {
+    await this.page.evaluate(async () => {
+      const step = 400; // Step size
+      let totalScrolled = 0;
+
+      while (totalScrolled + window.innerHeight < document.body.scrollHeight) {
+        window.scrollBy({
+          top: step,
+          behavior: 'smooth',
+        });
+        totalScrolled += step;
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait a bit for smooth scrolling
+      }
+    });
+
+    // Function to scroll up the page by 400px steps until the top
+    await this.page.evaluate(async () => {
+      const step = 400; // Step size
+
+      while (window.scrollY > 0) {
+        window.scrollBy({
+          top: -step,
+          behavior: 'smooth',
+        });
+        await new Promise((resolve) => setTimeout(resolve, 100)); // Wait a bit for smooth scrolling
+      }
+    });
   }
 
   async scrollIntoView(

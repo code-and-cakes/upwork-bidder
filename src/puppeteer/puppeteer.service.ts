@@ -14,6 +14,7 @@ import { StealthPlugin } from './plugins/stealth.plugin';
 export class PuppeteerService implements OnModuleDestroy {
   private browser: Browser;
   private page: Page;
+
   authFn: () => void;
 
   async init() {
@@ -62,6 +63,10 @@ export class PuppeteerService implements OnModuleDestroy {
 
   getHTML() {
     return this.page.content();
+  }
+
+  findMany(selector: string) {
+    return this.page.$$(selector);
   }
 
   // Cookies
@@ -153,7 +158,7 @@ export class PuppeteerService implements OnModuleDestroy {
     await wait(Math.random() * 400 + 100);
   }
 
-  async type(selector: string, text: string) {
+  async type(selector: string, text: string, delay?: number) {
     await this.waitForElement(selector);
     // Click the input field first
     await this.click(selector);
@@ -161,7 +166,7 @@ export class PuppeteerService implements OnModuleDestroy {
     // Type with random delays between keystrokes
     for (const char of text) {
       await this.page.keyboard.type(char, {
-        delay: Math.random() * 100 + 50, // Random delay between keystrokes
+        delay: delay || Math.random() * 100 + 50, // Random delay between keystrokes
       });
     }
     await wait(400);

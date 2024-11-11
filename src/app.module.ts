@@ -3,8 +3,9 @@ import { ConfigModule } from '@nestjs/config';
 
 import { AutomationModule } from './automation/automation.module';
 import { GlobalModule } from './global';
-import { LoggerMiddleware } from './shared/middlewares';
 import { JobsModule } from './jobs/jobs.module';
+import { LoggerMiddleware } from './shared/middlewares';
+import { CompanyModule } from './company/company.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { JobsModule } from './jobs/jobs.module';
     GlobalModule,
     AutomationModule,
     JobsModule,
+    CompanyModule,
   ],
 })
 export class AppModule {

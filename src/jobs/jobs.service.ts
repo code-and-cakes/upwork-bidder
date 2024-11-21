@@ -15,7 +15,7 @@ export class JobsService {
         postedAt: d.postedAt,
         link: d.link,
       },
-    });
+    }) as unknown as Job;
   }
 
   async createMany(jobs: Dto<Job>[]): Promise<Job[]> {
@@ -27,7 +27,7 @@ export class JobsService {
         link: job.link,
       })),
       skipDuplicates: true,
-    });
+    }) as unknown as Job[];
   }
 
   async update(id: Id, data: Partial<Dto<Job>>): Promise<Job> {

@@ -3,7 +3,7 @@ import { ChatOpenAI } from '@langchain/openai';
 
 import { OpenAIModels } from '../models/open-ai';
 
-export async function askAI<T extends boolean | undefined>({
+export async function askAI({
   system,
   user,
   temperature = 0.2,
@@ -14,7 +14,7 @@ export async function askAI<T extends boolean | undefined>({
   user?: string;
   temperature?: number;
   model?: OpenAIModels;
-  json?: T;
+  json?: boolean;
 }) {
   const messages = [];
   if (system) messages.push(new SystemMessage(system));

@@ -1,5 +1,8 @@
-import { Job as pJob } from '.prisma/client';
+import { Job as PrismaJob } from '.prisma/client';
 
-export interface Job extends Omit<pJob, 'data'> {
-  data: any;
+export interface Job extends Omit<PrismaJob, 'data'> {
+  data: {
+    skills: string[];
+    description: string;
+  };
 }

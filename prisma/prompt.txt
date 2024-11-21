@@ -1,7 +1,4 @@
-import { PromptTemplate } from '@langchain/core/prompts';
-
-export const generateCLPrompt = PromptTemplate.fromTemplate(
-  `We need to write a cover letter for an Upwork job proposal.
+We need to write a cover letter for an Upwork job proposal.
 As a context for the cover letter, you have the following information:
 - The job proposal details
 - Relevant company information
@@ -54,7 +51,8 @@ The structure of the cover letter should be as follows:
 
 6. Call to action:
 - Main idea here is to ask the client to jump on call.
-- Use the following templates as reference: "Let's jump on a call, and I will convince you in it. \n Which time works best for you?" or "Is it worth chatting? Which time works best for you?"
+- Use the following templates as reference: "Let's jump on a call, and I will convince you in it.
+ Which time works best for you?" or "Is it worth chatting? Which time works best for you?"
 
 7. Name of the applicant:
 - End with the first name of the applicant.
@@ -64,5 +62,4 @@ Examples of good and effective cover letters:
 {examples}
 </examples>
 
-Answer:`,
-);
+Answer:

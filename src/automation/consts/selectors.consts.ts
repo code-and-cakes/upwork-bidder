@@ -12,6 +12,8 @@ export const SELECTORS = {
   },
   job: {
     el: {
+      previewDescription: 'div[data-test="UpCLineClamp JobDescription"]',
+      previewSkill: 'button[data-test="token"]',
       jobCard: 'article[data-test="JobTile"]',
       jobTitle: 'h4',
       jobDescription: 'div[data-test="Description"]',

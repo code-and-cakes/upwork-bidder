@@ -1,6 +1,6 @@
-import { Job } from '@prisma/client';
 import * as cheerio from 'cheerio';
 
+import { Job } from '../../jobs/types/job.types';
 import { SELECTORS } from '../consts/selectors.consts';
 import { UPWORK_URL } from '../consts/upwork-urls.consts';
 import { parseUpworkDate } from './parseUpworkDate';
@@ -23,10 +23,15 @@ export function parseJobs(html: string): Dto<Job>[] {
 
     const postedAt = new Date(parseUpworkDate(postedAtStr as any));
 
-    jobs.push({ title, link, postedAt, data: {} });
-  });
+    const skills = $(el)
+      .find(SELECTORS.job.el.previewSkill)
+      .toArray()
+      .map((el) => $(el).text());
 
-  console.log('Jobs:', jobs);
+    const description = $(el).find(SELECTORS.job.el.previewDescription).text();
+
+    jobs.push({ title, link, postedAt, data: { skills, description } });
+  });
 
   return jobs;
 }

@@ -6,6 +6,8 @@ import { GlobalModule } from './global';
 import { JobsModule } from './jobs/jobs.module';
 import { LoggerMiddleware } from './shared/middlewares';
 import { CompanyModule } from './company/company.module';
+import { AccountsModule } from './accounts/accounts.module';
+import { CasesModule } from './cases/cases.module';
 
 @Module({
   imports: [
@@ -17,6 +19,8 @@ import { CompanyModule } from './company/company.module';
     AutomationModule,
     JobsModule,
     CompanyModule,
+    AccountsModule,
+    CasesModule,
   ],
 })
 export class AppModule {

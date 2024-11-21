@@ -43,7 +43,7 @@ export class AutomationService {
 
   async applyForJob(job: Job) {
     await this.ui.navigateTo(job.link);
-    // await this.ui.scrollDownAndUp();
+    await this.ui.scrollDownAndUp();
 
     const html = await this.ui.getHTML();
     const jobData = parseJobInfo(html);
@@ -80,14 +80,13 @@ export class AutomationService {
     await wait(1000);
     await this.waitForLogin();
 
-    // await this.findJobs(testSearchSuit1);
-    // return;
+    await this.findJobs(testSearchSuit1);
 
-    const job = await this.jobsService.findOne(
-      'e9abbaae-72d0-45e5-97a7-2c29ae152300',
-    );
-
-    await this.applyForJob(job);
+    // const job = await this.jobsService.findOne(
+    //   'e9abbaae-72d0-45e5-97a7-2c29ae152300',
+    // );
+    //
+    // await this.applyForJob(job);
   }
 
   // Auth

@@ -7,12 +7,56 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+model Account {
   id    String @id @default(uuid())
   email String @unique
 
+  firstName String
+  lastName  String
+
+  skills   Skill[]
+  description String
+
+  githubId  String @unique
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model CompanyData {
+  id    String @id
+
+  name  String @unique
+  moto  String?
+
+  overview String
+  services Json
+  skills Skill[]
+
+  website String
+}
+
+model Case {
+  id    String @id @default(uuid())
+
+  name  String @unique
+  duration String
+  market String
+  industry String
+  description String
+
+  data Json
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Skill {
+  id    String @id
+  name  String @unique
+
+  accounts Account[]
+  companies CompanyData[]
 }
 
 model Job {

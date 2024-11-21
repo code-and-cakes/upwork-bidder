@@ -1,11 +1,12 @@
-import * as fs from 'node:fs';
-import * as path from 'node:path';
+import { prismaClient } from '../prisma/prisma-client';
+import { defineBestCases } from '../src/ai/define-best-cases';
 
-import { parseJobInfo } from '../src/automation/lib/parseJobInfo';
+async function test() {
+  const cases = (await prismaClient.case.findMany()) as any;
+  const jobData = (await prismaClient.job.findFirst()) as any;
 
-async function testParseJobs() {
-  const html = fs.readFileSync(path.join(__dirname, 'job-info.html'), 'utf-8');
-  return parseJobInfo(html);
+  const res = await defineBestCases({ cases, jobData });
+  console.log(res);
 }
 
-testParseJobs();
+test();

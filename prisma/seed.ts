@@ -1,3 +1,4 @@
+import { seedAccounts } from '../src/accounts/lib/seedAccounts';
 import { SKILLS_DATA } from '../src/automation/consts/skills.consts';
 import { prismaClient } from './prisma-client';
 
@@ -7,6 +8,8 @@ async function main() {
     console.log('Seeding skills...');
     await prismaClient.skill.createMany({ data: SKILLS_DATA });
   }
+
+  await seedAccounts();
 }
 
 main()

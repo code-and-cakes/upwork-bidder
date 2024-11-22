@@ -1,6 +1,6 @@
-import { JobInfo } from '../../automation/types/job.types';
+import { JobInfo } from '../../../automation/types/job.types';
 
-export const getJobInfo = (d: JobInfo) => `
+export const formatJobInfo = (d: JobInfo) => `
 Job Title: "${d.title}"
 
 Job Description: 

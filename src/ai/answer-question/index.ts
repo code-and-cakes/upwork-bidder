@@ -1,7 +1,7 @@
 import { JobInfo } from '../../automation/types/job.types';
 import { CompanyData } from '../../company/types/company.types';
-import { getCompanyInfo } from '../generate-cl/getCompanyInfo';
-import { getJobInfo } from '../generate-cl/getJobInfo';
+import { formatJobInfo } from '../generate-cl/templates/formatJobInfo';
+import { getCompanyInfo } from '../generate-cl/templates/getCompanyInfo';
 import { askAI } from '../lib/askAI';
 import { OpenAIModels } from '../models/open-ai';
 import { answerQuestionPrompt } from './prompt';
@@ -14,7 +14,7 @@ interface Input {
 
 export async function answerQuestion(dto: Input): Promise<string> {
   const companyInfo = getCompanyInfo(dto.companyData);
-  const jobInfo = getJobInfo(dto.jobData);
+  const jobInfo = formatJobInfo(dto.jobData);
 
   const prompt = await answerQuestionPrompt.format({
     companyInfo,

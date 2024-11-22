@@ -1,0 +1,11 @@
+{
+  "firstName": "Lolita",
+  "lastName": "Popova",
+  "githubId": "Lolmta",
+  "title": "Frontend Development | React.js, Next.js, Responsive Web Design",
+
+  "skills": ["Responsive Design", "Front-End Development", "Next.js", "React", "JavaScript", "CSS", "SCSS", "Node.js", "Redux", "TypeScript", "Git", "styled-components", "Google Tag Manager", "Google Analytics 4", "API Integration"],
+
+  "email": "lolita.popova@codeandcakes.com",
+  "description": "I'm a Front-End Engineer with a strong passion for learning new tech and improving myself.\nI have a bachelor's degree in computer science, and worked as a front-end developer for a couple of years now. During this time, I gained a lot of experience in working both in a team and as a single developer on projects of varying complexity."
+}

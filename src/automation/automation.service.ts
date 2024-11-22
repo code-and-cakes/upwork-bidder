@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
+import { ElementHandle } from 'puppeteer';
 
+import { AccountsService } from '../accounts/accounts.service';
 import { answerQuestion } from '../ai/answer-question';
 import { generateCL } from '../ai/generate-cl';
+import { CasesService } from '../cases/cases.service';
 import { companyDataMock } from '../company/mocks/companyData.mock';
 import { JobsService } from '../jobs/jobs.service';
 import { Job } from '../jobs/types/job.types';
@@ -15,7 +18,7 @@ import { getJobSearchLink } from './lib/getJobSearchLink';
 import { getJobSearchParams } from './lib/getJobSearchParams';
 import { parseJobInfo } from './lib/parseJobInfo';
 import { parseJobs } from './lib/parseJobs';
-import { JobSearchParams } from './types/job.types';
+import { JobInfo, JobSearchParams } from './types/job.types';
 
 @Injectable()
 export class AutomationService {
@@ -24,6 +27,8 @@ export class AutomationService {
   constructor(
     private readonly ui: PuppeteerService,
     private readonly jobsService: JobsService,
+    private readonly accountsService: AccountsService,
+    private readonly casesService: CasesService,
   ) {
     this.ui.authFn = this.login.bind(this);
     this.ui.init().then(() => this.start());
@@ -37,8 +42,7 @@ export class AutomationService {
     await this.ui.navigateTo(url);
     const html = await this.ui.getHTML();
     const parsedJobs = parseJobs(html);
-    const dbJobs = await this.jobsService.createMany(parsedJobs);
-    console.log(dbJobs);
+    await this.jobsService.createMany(parsedJobs);
   }
 
   async applyForJob(job: Job) {
@@ -48,31 +52,20 @@ export class AutomationService {
     const html = await this.ui.getHTML();
     const jobData = parseJobInfo(html);
 
-    console.log(jobData);
-
-    const coverLetter = await generateCL({
-      jobData,
-      companyData: companyDataMock,
-    });
-
     await this.ui.click(SELECTORS.job.btn.apply);
 
     await this.ui.waitForElement(SELECTORS.bidding.input.coverLetter, 10000);
+
+    const coverLetter = await this.generateCL({
+      jobData,
+      accountId: job.accountId,
+    });
 
     await this.ui.scrollIntoView(SELECTORS.bidding.input.coverLetter);
     await this.ui.type(SELECTORS.bidding.input.coverLetter, coverLetter, 10);
 
     const questions = await this.ui.findMany('.questions-area textarea');
-    let questionIdx = 0;
-    for (const questionEl of questions) {
-      const answer = await answerQuestion({
-        question: jobData.questions[questionIdx],
-        jobData,
-        companyData: companyDataMock,
-      });
-      await questionEl.type(answer);
-      questionIdx += 1;
-    }
+    await this.answerQuestions({ jobData, questions });
   }
 
   async start() {
@@ -89,6 +82,39 @@ export class AutomationService {
     // await this.applyForJob(job);
   }
 
+  private async generateCL(d: { jobData: JobInfo; accountId: string }) {
+    const { jobData, accountId } = d;
+
+    const accountData = await this.accountsService.findOne(accountId);
+    const cases = await this.casesService.findAll();
+    const companyData = companyDataMock;
+
+    return generateCL({
+      cases,
+      jobData,
+      accountData,
+      companyData,
+    });
+  }
+
+  private async answerQuestions(d: {
+    jobData: JobInfo;
+    questions: ElementHandle[];
+  }) {
+    const { jobData, questions } = d;
+    let questionIdx = 0;
+
+    for (const questionEl of questions) {
+      const answer = await answerQuestion({
+        question: jobData.questions[questionIdx],
+        jobData,
+        companyData: companyDataMock,
+      });
+      await questionEl.type(answer);
+      questionIdx += 1;
+    }
+  }
+
   // Auth
   private async login() {
     console.log('Logging in...');
@@ -96,7 +122,7 @@ export class AutomationService {
 
     await this.ui.setToLocalStorage(LOCAL_STORAGE_VALUES);
 
-    await wait(500);
+    await wait(2000);
 
     await this.ui.type(SELECTORS.login.input.email, process.env.UPWORK_EMAIL);
     await this.ui.click(SELECTORS.login.btn.goToPwd);

@@ -1,5 +1,3 @@
-declare module 'intuit-oauth';
-
 type ValueOf<T> = T[keyof T];
 
 type DeepPartial<T> = T extends object

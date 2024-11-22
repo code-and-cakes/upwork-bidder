@@ -45,4 +45,13 @@ export const SKILLS_DATA: { id: string; name: string }[] = [
   { id: '1031626774218784768', name: 'Redis' },
   { id: '1031626781583982592', name: 'Solidity' },
   { id: '1031626775997169664', name: 'Rust' },
+  { id: '1110580482566246400', name: 'API Integration' },
+  { id: '1052162209007587329', name: 'Responsive Design' },
+  { id: '1031626740031012864', name: 'Front-End Development' },
+  { id: '1031626778304036864', name: 'SCSS' },
+  { id: '1031626728794472448', name: 'CSS' },
+  { id: '1031626741293498368', name: 'Git' },
+  { id: '1192876993406320640', name: 'styled-components' },
+  { id: '1031626742535012352', name: 'Google Tag Manager' },
+  { id: '1691099313801277440', name: 'Google Analytics 4' },
 ];

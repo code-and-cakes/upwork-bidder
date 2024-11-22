@@ -14,10 +14,13 @@ model Account {
   firstName String
   lastName  String
 
+  title    String
+  githubId  String @unique
+
   skills   Skill[]
   description String
 
-  githubId  String @unique
+  jobs      Job[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -67,6 +70,9 @@ model Job {
   postedAt  DateTime
 
   data      Json
+
+  account   Account @relation(fields: [accountId], references: [id])
+  accountId String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -30,7 +30,13 @@ export function parseJobs(html: string): Dto<Job>[] {
 
     const description = $(el).find(SELECTORS.job.el.previewDescription).text();
 
-    jobs.push({ title, link, postedAt, data: { skills, description } });
+    jobs.push({
+      title,
+      link,
+      postedAt,
+      data: { skills, description },
+      accountId: null,
+    });
   });
 
   return jobs;

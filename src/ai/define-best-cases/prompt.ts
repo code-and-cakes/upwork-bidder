@@ -5,13 +5,13 @@ export const defineBestCasesPrompt = PromptTemplate.fromTemplate(
 Take into account job industry, skills, and other info you see fit.
 The output should be a json object of the following format: {{ "cases": ["caseName1", "caseName2"] }}
 
-<job-proposal>
+<job_proposal>
 {jobInfo}
-</job-proposal>
+</job_proposal>
 
-<companyInfo>
+<company_info>
 {casesList}
-</companyInfo>
+</company_info>
 
 Answer:`,
 );

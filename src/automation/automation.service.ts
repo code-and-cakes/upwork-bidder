@@ -5,7 +5,7 @@ import { AccountsService } from '../accounts/accounts.service';
 import { answerQuestion } from '../ai/answer-question';
 import { generateCL } from '../ai/generate-cl';
 import { CasesService } from '../cases/cases.service';
-import { companyDataMock } from '../company/mocks/companyData.mock';
+import { CompanyService } from '../company/company.service';
 import { JobsService } from '../jobs/jobs.service';
 import { Job } from '../jobs/types/job.types';
 import { PuppeteerService } from '../puppeteer/puppeteer.service';
@@ -29,6 +29,7 @@ export class AutomationService {
     private readonly jobsService: JobsService,
     private readonly accountsService: AccountsService,
     private readonly casesService: CasesService,
+    private readonly companyService: CompanyService,
   ) {
     this.ui.authFn = this.login.bind(this);
     this.ui.init().then(() => this.start());
@@ -87,7 +88,7 @@ export class AutomationService {
 
     const accountData = await this.accountsService.findOne(accountId);
     const cases = await this.casesService.findAll();
-    const companyData = companyDataMock;
+    const companyData = await this.companyService.getInfo();
 
     return generateCL({
       cases,
@@ -103,12 +104,13 @@ export class AutomationService {
   }) {
     const { jobData, questions } = d;
     let questionIdx = 0;
+    const companyData = await this.companyService.getInfo();
 
     for (const questionEl of questions) {
       const answer = await answerQuestion({
         question: jobData.questions[questionIdx],
         jobData,
-        companyData: companyDataMock,
+        companyData,
       });
       await questionEl.type(answer);
       questionIdx += 1;

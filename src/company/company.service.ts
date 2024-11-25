@@ -1,26 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCompanyDto } from './dto/create-company.dto';
-import { UpdateCompanyDto } from './dto/update-company.dto';
+
+import { AbstractCrudService } from '../cases/abstract-crud.service';
+import { PrismaService } from '../global';
+import { CompanyData } from './types/company-data';
 
 @Injectable()
-export class CompanyService {
-  create(createCompanyDto: CreateCompanyDto) {
-    return 'This action adds a new company';
+export class CompanyService extends AbstractCrudService<CompanyData> {
+  constructor(private readonly db: PrismaService) {
+    super(db, 'CompanyData');
   }
 
-  findAll() {
-    return `This action returns all company`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} company`;
-  }
-
-  update(id: number, updateCompanyDto: UpdateCompanyDto) {
-    return `This action updates a #${id} company`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} company`;
+  async getInfo() {
+    const [companyInfo] = await this.findAll();
+    return companyInfo;
   }
 }

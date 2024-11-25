@@ -8,7 +8,7 @@ export function writeObjToFile(obj: object, fileName: string): void {
 }
 
 export function writeToFile(content: string, fileName: string): void {
-  const dest = path.resolve(__dirname, `../../../../logs/${fileName}`);
+  const dest = path.resolve(__dirname, `../../../logs/${fileName}`);
 
   fs.writeFile(dest, content, (err) => {
     if (err) {

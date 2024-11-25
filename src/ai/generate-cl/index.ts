@@ -1,8 +1,8 @@
-import { Account } from '@prisma/client';
+import { Account, CompanyData } from '@prisma/client';
 
 import { JobInfo } from '../../automation/types/job.types';
 import { Case } from '../../cases/types/case.types';
-import { CompanyData } from '../../company/types/company.types';
+import { writeToFile } from '../../shared/lib/write-to-file';
 import { defineBestCases } from '../define-best-cases';
 import { askAI } from '../lib/askAI';
 import { OpenAIModels } from '../models/open-ai';
@@ -20,6 +20,7 @@ interface Input {
 }
 
 export async function generateCL(d: Input): Promise<string> {
+  // console.log(d.jobData);
   const companyInfo = getCompanyInfo(d.companyData);
   const jobInfo = formatJobInfo(d.jobData);
   const cases = await defineBestCases({ cases: d.cases, jobData: d.jobData });
@@ -34,9 +35,15 @@ export async function generateCL(d: Input): Promise<string> {
     applicantInfo,
   });
 
-  return askAI({
+  writeToFile(prompt, 'cl-prompt.txt');
+
+  const res = await askAI({
     system: prompt,
     temperature: 0.7,
     model: OpenAIModels.GPT4Turbo,
   });
+
+  writeToFile(res, 'cl-response.txt');
+
+  return res;
 }

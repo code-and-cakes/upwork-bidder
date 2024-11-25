@@ -1,5 +1,6 @@
 import { seedAccounts } from '../src/accounts/lib/seedAccounts';
 import { SKILLS_DATA } from '../src/automation/consts/skills.consts';
+import { seedCompanyData } from '../src/company/lib/seedCompanyData';
 import { prismaClient } from './prisma-client';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -10,6 +11,8 @@ async function main() {
   }
 
   await seedAccounts();
+
+  await seedCompanyData();
 }
 
 main()

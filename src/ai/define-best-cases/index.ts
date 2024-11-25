@@ -1,5 +1,6 @@
 import { JobInfo } from '../../automation/types/job.types';
 import { Case } from '../../cases/types/case.types';
+import { simpleListFormat } from '../../shared/lib/simpleListFormat';
 import { formatJobInfo } from '../generate-cl/templates/formatJobInfo';
 import { askAI } from '../lib/askAI';
 import { OpenAIModels } from '../models/open-ai';
@@ -12,11 +13,7 @@ export async function defineBestCases({
   cases: Case[];
   jobData: JobInfo;
 }): Promise<string> {
-  const jobInfo = formatJobInfo({
-    description: jobData.description,
-    skills: jobData.skills,
-    title: jobData.title,
-  } as JobInfo);
+  const jobInfo = formatJobInfo(jobData);
 
   const casesList = cases
     .map((i) => JSON.stringify(i.data, null, 2))
@@ -42,5 +39,5 @@ export async function defineBestCases({
 
   const bestCases = cases.filter((i) => caseNames.includes(i.name));
 
-  return bestCases.map((i) => i.data).join('\n---\n');
+  return simpleListFormat(bestCases.map((i) => i.data));
 }

@@ -1,5 +1,5 @@
 import { JobInfo } from '../../automation/types/job.types';
-import { CompanyData } from '../../company/types/company.types';
+import { CompanyData } from '../../company/types/company-data';
 import { formatJobInfo } from '../generate-cl/templates/formatJobInfo';
 import { getCompanyInfo } from '../generate-cl/templates/getCompanyInfo';
 import { askAI } from '../lib/askAI';

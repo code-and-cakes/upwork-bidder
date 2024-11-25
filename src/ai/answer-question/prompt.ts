@@ -5,14 +5,14 @@ export const answerQuestionPrompt = PromptTemplate.fromTemplate(
 Based on the job description and relevant company information answer the question below. 
 
 Here is the information about the job:
-<jobInfo>
+<job_Info>
 {jobInfo}
-</jobInfo>
+</job_Info>
 
 Relevant company information: 
-<companyInfo>
+<company_info>
 {companyInfo}
-</companyInfo>
+</company_info>
 
 Question to answer:
 <question>

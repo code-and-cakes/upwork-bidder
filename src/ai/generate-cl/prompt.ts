@@ -11,17 +11,17 @@ As a context for the cover letter, you have the following information:
 Tone of voice: friendly, easy-to-read.
 Please do not add any extra or non-factual information — only use the info provided.
 
-<job-proposal>
+<job_proposal>
 {jobInfo}
-</job-proposal>
+</job_proposal>
 
-<company-info>
+<company_info>
 {companyInfo}
-</company-info>
+</company_info>
 
-<applicant-info>
+<applicant_info>
 {applicantInfo}
-</applicant-info>
+</applicant_info>
 
 <cases>
 {cases}
@@ -29,7 +29,8 @@ Please do not add any extra or non-factual information — only use the info pro
 
 The structure of the cover letter should be as follows:
 1. Hook + case demonstration:
-- Start with a hook that grabs the client's attention.
+- Start with a hook that grabs the client's attention
+- skip salutation: no "hello" or "hi there". Go straight to the point. Skip any formalities, such as subject, too.
 - Present the case that best match the job proposal. The idea is "You want a Data Management platform? Look, I've done that already!".
 - Explain why the case is relevant to the job proposal.
 - Focus on the metrics, results and benefits of the case.

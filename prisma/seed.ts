@@ -1,6 +1,7 @@
 import { seedAccounts } from '../src/accounts/lib/seedAccounts';
 import { SKILLS_DATA } from '../src/automation/consts/skills.consts';
 import { seedCompanies } from '../src/companies/lib/seedCompanies';
+import { seedPromptTemplates } from '../src/prompt-templates/lib/seedPromptTemplates';
 import { prismaClient } from './prisma-client';
 
 async function main() {
@@ -12,6 +13,8 @@ async function main() {
   await seedCompanies();
 
   await seedAccounts();
+
+  await seedPromptTemplates();
 }
 
 main()

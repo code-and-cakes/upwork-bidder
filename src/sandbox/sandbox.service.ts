@@ -7,6 +7,7 @@ import { CasesService } from '../cases/cases.service';
 import { CompaniesService } from '../companies/companies.service';
 import { PrismaService } from '../global';
 import { JobsService } from '../jobs/jobs.service';
+import { PromptTemplatesService } from '../prompt-templates/prompt-templates.service';
 import { GenerateClDto } from './dto/generate-cl.dto';
 
 @Injectable()
@@ -18,11 +19,19 @@ export class SandboxService {
     private readonly accountsService: AccountsService,
     private readonly casesService: CasesService,
     private readonly companyService: CompaniesService,
+    private readonly ptService: PromptTemplatesService,
   ) {}
 
   async generateCL(d: GenerateClDto) {
-    const { accountId, companyId, jobName, jobDomain, jobDescription, skills } =
-      d;
+    const {
+      accountId,
+      companyId,
+      jobName,
+      jobDomain,
+      jobDescription,
+      skills,
+      templateId,
+    } = d;
 
     const jobData = {
       title: jobName,
@@ -34,12 +43,14 @@ export class SandboxService {
     const accountData = await this.accountsService.findOne(accountId);
     const cases = await this.casesService.findAll();
     const companyData = await this.companyService.findOne(companyId);
+    const template = await this.ptService.findOne(templateId);
 
     return generateCL({
       cases,
       jobData,
       accountData,
       companyData,
+      template,
     });
   }
 }

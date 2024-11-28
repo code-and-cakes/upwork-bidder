@@ -1,7 +1,4 @@
-import { PromptTemplate } from '@langchain/core/prompts';
-
-export const generateCLPrompt = PromptTemplate.fromTemplate(
-  `We need to write a cover letter for an Upwork job proposal.
+export const CC_PROMPT_TEMPLATE_V1_VALUE = `We need to write a cover letter for an Upwork job proposal.
 As a context for the cover letter, you have the following information:
 - The job proposal details
 - Relevant company information
@@ -65,5 +62,4 @@ Examples of good and effective cover letters:
 {examples}
 </examples>
 
-Answer:`,
-);
+Answer:`;

@@ -44,6 +44,7 @@ model Company {
   cases Case[]
   accounts Account[]
   jobs Job[]
+  promptTemplates PromptTemplate[] @relation(name: "templates")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -89,6 +90,21 @@ model Job {
 
   companyId String
   company   Company @relation(fields: [companyId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PromptTemplate {
+  id    String @id @default(uuid())
+
+  name  String @unique
+  value String
+
+  active Boolean? @default(true)
+
+  companyId String
+  company   Company @relation(fields: [companyId], references: [id], name: "templates")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -7,6 +7,9 @@ export class GenerateClDto {
   @IsUUID()
   accountId: Id;
 
+  @IsUUID()
+  templateId: Id;
+
   @IsString()
   jobName: string;
 

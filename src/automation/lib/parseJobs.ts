@@ -36,6 +36,7 @@ export function parseJobs(html: string): Dto<Job>[] {
       postedAt,
       data: { skills, description },
       accountId: null,
+      companyId: null,
     });
   });
 

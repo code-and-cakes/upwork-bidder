@@ -1,4 +1,4 @@
-import { Account, CompanyData } from '@prisma/client';
+import { Account, Company } from '@prisma/client';
 
 import { JobInfo } from '../../automation/types/job.types';
 import { Case } from '../../cases/types/case.types';
@@ -13,7 +13,7 @@ import { formatJobInfo } from './templates/formatJobInfo';
 import { getCompanyInfo } from './templates/getCompanyInfo';
 
 interface Input {
-  companyData: CompanyData;
+  companyData: Company;
   jobData: JobInfo;
   accountData: Account;
   cases: Case[];

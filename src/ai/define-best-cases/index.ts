@@ -38,6 +38,10 @@ export async function defineBestCases({
   }
 
   const bestCases = cases.filter((i) => caseNames.includes(i.name));
+  console.log(
+    'Best cases:',
+    bestCases.map((i) => i.name),
+  );
 
   return simpleListFormat(bestCases.map((i) => i.data));
 }

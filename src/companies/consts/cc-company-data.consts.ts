@@ -1,6 +1,6 @@
-import { CompanyData } from '../types/company-data';
+import { Company } from '../types/company-data';
 
-export const CC_COMPANY_DATA: Dto<CompanyData> = {
+export const CC_COMPANY_DATA: Dto<Company> = {
   name: 'Code & Cakes',
   moto: 'Web and Mobile Development Experts with AI experience',
   services: [

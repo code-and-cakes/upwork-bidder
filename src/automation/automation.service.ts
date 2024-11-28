@@ -5,7 +5,7 @@ import { AccountsService } from '../accounts/accounts.service';
 import { answerQuestion } from '../ai/answer-question';
 import { generateCL } from '../ai/generate-cl';
 import { CasesService } from '../cases/cases.service';
-import { CompanyService } from '../company/company.service';
+import { CompaniesService } from '../companies/companies.service';
 import { JobsService } from '../jobs/jobs.service';
 import { Job } from '../jobs/types/job.types';
 import { PuppeteerService } from '../puppeteer/puppeteer.service';
@@ -13,7 +13,7 @@ import { wait } from '../shared/lib/wait';
 import { LOCAL_STORAGE_VALUES } from './consts/localStorage.consts';
 import { SELECTORS } from './consts/selectors.consts';
 import { UPWORK_URL } from './consts/upwork-urls.consts';
-import { testSearchSuit1 } from './data/test-search-suit-1';
+// import { testSearchSuit1 } from './data/test-search-suit-1';
 import { getJobSearchLink } from './lib/getJobSearchLink';
 import { getJobSearchParams } from './lib/getJobSearchParams';
 import { parseJobInfo } from './lib/parseJobInfo';
@@ -29,13 +29,13 @@ export class AutomationService {
     private readonly jobsService: JobsService,
     private readonly accountsService: AccountsService,
     private readonly casesService: CasesService,
-    private readonly companyService: CompanyService,
+    private readonly companyService: CompaniesService,
   ) {
     this.ui.authFn = this.login.bind(this);
-    this.ui.init().then(() => this.start());
+    // this.ui.init().then(() => this.start());
   }
 
-  async findJobs(dynamicParams: JobSearchParams) {
+  async findJobs(companyId: Id, dynamicParams: JobSearchParams) {
     const params = getJobSearchParams(dynamicParams);
     const url = getJobSearchLink(params);
 
@@ -43,7 +43,7 @@ export class AutomationService {
     await this.ui.navigateTo(url);
     const html = await this.ui.getHTML();
     const parsedJobs = parseJobs(html);
-    await this.jobsService.createMany(parsedJobs);
+    await this.jobsService.createMany(companyId, parsedJobs);
   }
 
   async applyForJob(job: Job) {
@@ -60,21 +60,27 @@ export class AutomationService {
     const coverLetter = await this.generateCL({
       jobData,
       accountId: job.accountId,
+      companyId: job.companyId,
     });
 
     await this.ui.scrollIntoView(SELECTORS.bidding.input.coverLetter);
     await this.ui.type(SELECTORS.bidding.input.coverLetter, coverLetter, 10);
 
     const questions = await this.ui.findMany('.questions-area textarea');
-    await this.answerQuestions({ jobData, questions });
+    await this.answerQuestions({
+      jobData,
+      questions,
+      companyId: job.companyId,
+    });
   }
 
   async start() {
     await this.ui.navigateTo(UPWORK_URL.bestMatches);
     await wait(1000);
     await this.waitForLogin();
+    // const companyId = 'e9abbaae-72d0-45e5-97a7-2c29ae152300';
 
-    await this.findJobs(testSearchSuit1);
+    // await this.findJobs(companyId, testSearchSuit1);
 
     // const job = await this.jobsService.findOne(
     //   'e9abbaae-72d0-45e5-97a7-2c29ae152300',
@@ -83,12 +89,16 @@ export class AutomationService {
     // await this.applyForJob(job);
   }
 
-  private async generateCL(d: { jobData: JobInfo; accountId: string }) {
+  async generateCL(d: {
+    jobData: JobInfo;
+    accountId: string;
+    companyId: string;
+  }) {
     const { jobData, accountId } = d;
 
     const accountData = await this.accountsService.findOne(accountId);
     const cases = await this.casesService.findAll();
-    const companyData = await this.companyService.getInfo();
+    const companyData = await this.companyService.findOne(d.companyId);
 
     return generateCL({
       cases,
@@ -101,10 +111,11 @@ export class AutomationService {
   private async answerQuestions(d: {
     jobData: JobInfo;
     questions: ElementHandle[];
+    companyId: string;
   }) {
-    const { jobData, questions } = d;
+    const { jobData, questions, companyId } = d;
     let questionIdx = 0;
-    const companyData = await this.companyService.getInfo();
+    const companyData = await this.companyService.findOne(companyId);
 
     for (const questionEl of questions) {
       const answer = await answerQuestion({

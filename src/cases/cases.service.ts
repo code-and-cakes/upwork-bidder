@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { PrismaService } from '../global';
-import { AbstractCrudService } from './abstract-crud.service';
+import { AbstractCrudService } from '../shared/classes/abstract-crud.service';
 import { Case, SheetCase } from './types/case.types';
 
 @Injectable()
@@ -10,7 +10,7 @@ export class CasesService extends AbstractCrudService<Case> {
     super(db, 'Case');
   }
 
-  async upload(cases: SheetCase[]): Promise<Case[]> {
+  async upload(companyId: Id, cases: SheetCase[]): Promise<Case[]> {
     await this.db.case.deleteMany();
     await this.db.case.createMany({
       data: cases.map((c) => ({
@@ -20,6 +20,7 @@ export class CasesService extends AbstractCrudService<Case> {
         industry: c.INDUSTRY,
         market: c.MARKET,
         data: c as any,
+        companyId,
       })),
     });
     return this.findAll();

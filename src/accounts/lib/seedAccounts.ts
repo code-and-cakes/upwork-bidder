@@ -20,10 +20,13 @@ export async function seedAccounts() {
         id: skillsNameDataMap[skillName],
       }));
 
+      const company = await prismaClient.company.findFirst();
+
       await prismaClient.account.create({
         data: {
           ...account,
           skills: { connect: skills },
+          companyId: company.id,
         },
       });
     }

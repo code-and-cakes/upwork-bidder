@@ -1,18 +1,17 @@
 import { seedAccounts } from '../src/accounts/lib/seedAccounts';
 import { SKILLS_DATA } from '../src/automation/consts/skills.consts';
-import { seedCompanyData } from '../src/company/lib/seedCompanyData';
+import { seedCompanies } from '../src/companies/lib/seedCompanies';
 import { prismaClient } from './prisma-client';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function main() {
   if ((await prismaClient.skill.findMany()).length === 0) {
     console.log('Seeding skills...');
     await prismaClient.skill.createMany({ data: SKILLS_DATA });
   }
 
-  await seedAccounts();
+  await seedCompanies();
 
-  await seedCompanyData();
+  await seedAccounts();
 }
 
 main()

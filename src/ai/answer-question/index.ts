@@ -1,5 +1,5 @@
 import { JobInfo } from '../../automation/types/job.types';
-import { CompanyData } from '../../company/types/company-data';
+import { Company } from '../../companies/types/company-data';
 import { formatJobInfo } from '../generate-cl/templates/formatJobInfo';
 import { getCompanyInfo } from '../generate-cl/templates/getCompanyInfo';
 import { askAI } from '../lib/askAI';
@@ -7,7 +7,7 @@ import { OpenAIModels } from '../models/open-ai';
 import { answerQuestionPrompt } from './prompt';
 
 interface Input {
-  companyData: CompanyData;
+  companyData: Company;
   jobData: JobInfo;
   question: string;
 }

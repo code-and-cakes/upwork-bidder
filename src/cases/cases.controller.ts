@@ -1,4 +1,11 @@
-import { Body, Controller, Get, Post, UploadedFile } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  UploadedFile,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { FileUpload } from '../shared/decorators/uploadFile';
@@ -26,5 +33,10 @@ export class CasesController {
   @Get()
   findAll() {
     return this.casesService.findAll();
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: Id) {
+    return this.casesService.findOne(id);
   }
 }

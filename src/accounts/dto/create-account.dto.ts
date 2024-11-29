@@ -23,6 +23,6 @@ export class CreateAccountDto implements Dto<Account> {
   @IsString()
   githubId: string;
 
-  @IsUUID(4, { each: true })
+  @IsString({ each: true })
   skills: Id[];
 }

@@ -1,14 +1,5 @@
 import { Prisma, PrismaClient } from '@prisma/client';
 
-const includeAllRelations = (modelName: string, schema: any) => {
-  const modelRelations = schema.models[modelName]?.relations || [];
-  const include = {};
-  modelRelations.forEach((relation) => {
-    include[relation.name] = true;
-  });
-  return include;
-};
-
 export abstract class AbstractCrudService<
   T extends { id: Id; createdAt: Date; updatedAt: Date },
 > {
@@ -21,7 +12,6 @@ export abstract class AbstractCrudService<
     try {
       return this.prisma[this.model].findUniqueOrThrow({
         where: { id },
-        include: includeAllRelations(this.model, this.prisma),
       }) as Promise<T | null>;
     } catch (e) {
       throw new Error(`Couldn't find ${this.model} with id: ${id}`);

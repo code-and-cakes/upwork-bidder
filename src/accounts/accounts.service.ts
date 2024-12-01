@@ -10,10 +10,24 @@ export class AccountsService extends AbstractCrudService<Account> {
     super(db, 'Account');
   }
 
-  findMany(companyId: string) {
+  findAll(companyId?: string) {
     return this.db.account.findMany({
       where: {
         companyId,
+      },
+      include: {
+        skills: true,
+      },
+    });
+  }
+
+  findOne(id: string) {
+    return this.db.account.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        skills: true,
       },
     });
   }

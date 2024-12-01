@@ -28,7 +28,7 @@ export class JobsService extends AbstractCrudService<Job> {
   }
 
   async createMany(companyId: Id, jobs: Dto<Job>[]): Promise<Job[]> {
-    const accounts = await this.accountsService.findMany(companyId);
+    const accounts = await this.accountsService.findAll(companyId);
     return Promise.all(
       jobs.map((job) => this.createWithAccount(job, accounts, companyId)),
     );

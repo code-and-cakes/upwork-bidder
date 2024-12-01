@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 
+import { SkillsModule } from '../skills/skills.module';
 import { CompaniesController } from './companies.controller';
 import { CompaniesService } from './companies.service';
 
@@ -7,5 +8,6 @@ import { CompaniesService } from './companies.service';
   controllers: [CompaniesController],
   providers: [CompaniesService],
   exports: [CompaniesService],
+  imports: [SkillsModule],
 })
 export class CompaniesModule {}

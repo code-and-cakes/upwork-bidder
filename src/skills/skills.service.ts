@@ -15,6 +15,10 @@ export class SkillsService {
     return this.db.skill.findMany();
   }
 
+  findManyByIds(ids: Id[]) {
+    return this.db.skill.findMany({ where: { id: { in: ids } } });
+  }
+
   findById(id: Id) {
     return this.db.skill.findUnique({ where: { id } });
   }
@@ -25,5 +29,13 @@ export class SkillsService {
 
   remove(id: Id) {
     return this.db.skill.delete({ where: { id } });
+  }
+
+  async getValidSkills(skillIds: Id[]) {
+    const skills = await this.findManyByIds(skillIds);
+
+    return skills.map((skill) => ({
+      id: skill.id,
+    }));
   }
 }

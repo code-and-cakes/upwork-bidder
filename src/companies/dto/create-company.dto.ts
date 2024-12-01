@@ -1,4 +1,4 @@
-import { IsArray, IsString, IsUUID } from 'class-validator';
+import { IsArray, IsString } from 'class-validator';
 
 import { Company } from '../types/company-data';
 
@@ -12,7 +12,7 @@ export class CreateCompanyDto implements Dto<Company> {
   @IsString()
   overview: string;
 
-  @IsUUID(4, { each: true })
+  @IsString({ each: true })
   skills: Id[];
 
   @IsString()

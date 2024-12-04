@@ -9,6 +9,7 @@ import { GlobalModule } from './global';
 import { JobsModule } from './jobs/jobs.module';
 import { PromptTemplatesModule } from './prompt-templates/prompt-templates.module';
 import { SandboxModule } from './sandbox/sandbox.module';
+import { SearchSuitsModule } from './search-suits/search-suits.module';
 import { LoggerMiddleware } from './shared/middlewares';
 import { SkillsModule } from './skills/skills.module';
 
@@ -27,6 +28,7 @@ import { SkillsModule } from './skills/skills.module';
     SkillsModule,
     PromptTemplatesModule,
     AIModule,
+    SearchSuitsModule,
   ],
 })
 export class AppModule {

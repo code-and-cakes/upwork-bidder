@@ -18,6 +18,13 @@ export class JobsService extends AbstractCrudService<Job> {
   ) {
     super(db, 'Job');
   }
+  findManyByAccount(accountId: Id) {
+    return this.db.job.findMany({
+      where: {
+        accountId,
+      },
+    });
+  }
 
   async getInfoByUpworkId(upworkId: string): Promise<JobInfo> {
     const html = await getHTMLFromUrl(

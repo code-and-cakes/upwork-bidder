@@ -1,4 +1,4 @@
-import { JobSearchParams } from '../types/job.types';
+import { JobSearchParams } from '../../search-suits/types/search-suit.types';
 
 export const defaultSearchParams: JobSearchParams = {
   locations: [],

@@ -1,5 +1,5 @@
+import { JobSearchParams } from '../../search-suits/types/search-suit.types';
 import { UPWORK_URL } from '../consts/upwork-urls.consts';
-import { JobSearchParams } from '../types/job.types';
 
 export function getJobSearchLink(params: JobSearchParams) {
   const { locations, skills, duration, budget, paymentVerified, keywords } =

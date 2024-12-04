@@ -35,19 +35,20 @@ model Company {
   name  String @unique
   moto  String?
 
-  overview String
   services Json
   skills Skill[]
+  overview String
 
   website String
 
+  jobs Job[]
   cases Case[]
   accounts Account[]
-  jobs Job[]
+  searchSuits SearchSuit[]
   promptTemplates PromptTemplate[] @relation(name: "templates")
 
-  createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
 }
 
 model Case {
@@ -108,4 +109,19 @@ model PromptTemplate {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model SearchSuit {
+  id    String @id @default(uuid())
+
+  name  String @unique
+  active Boolean @default(true)
+
+  value Json
+
+  companyId String
+  company   Company @relation(fields: [companyId], references: [id])
+
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
 }

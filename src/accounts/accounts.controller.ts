@@ -30,14 +30,14 @@ export class AccountsController {
     return this.accountsService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.accountsService.findOne(id);
-  }
-
   @Get('email')
   findOneById(@Query() q: FindByEmailQueryDto) {
     return this.accountsService.findOneByEmail(q.email);
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.accountsService.findOne(id);
   }
 
   @Patch(':id')

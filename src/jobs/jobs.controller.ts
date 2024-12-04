@@ -1,10 +1,17 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 import { JobsService } from './jobs.service';
 
+@ApiTags('Jobs')
 @Controller('jobs')
 export class JobsController {
   constructor(private readonly jobsService: JobsService) {}
+
+  @Get('account/:id')
+  findObyAccount(@Param('id') id: string) {
+    return this.jobsService.findManyByAccount(id);
+  }
 
   // @Post()
   // create(@Body() createJobDto: CreateJobDto) {

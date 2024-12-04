@@ -1,16 +1,3 @@
-import { Location } from '../consts/locations.consts';
-
-export interface JobSearchParams {
-  locations?: Location[];
-  skills?: string[];
-  keywords?: string[];
-
-  // static
-  duration?: JobDuration[];
-  budget?: Budget;
-  paymentVerified?: true;
-}
-
 export enum JobDuration {
   short = 'month',
   medium = 'semester',

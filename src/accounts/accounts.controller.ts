@@ -6,11 +6,13 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { AccountsService } from './accounts.service';
 import { CreateAccountDto } from './dto/create-account.dto';
+import { FindByEmailQueryDto } from './dto/find-by-email-query.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
 
 @ApiTags('Accounts')
@@ -31,6 +33,11 @@ export class AccountsController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.accountsService.findOne(id);
+  }
+
+  @Get('email')
+  findOneById(@Query() q: FindByEmailQueryDto) {
+    return this.accountsService.findOneByEmail(q.email);
   }
 
   @Patch(':id')

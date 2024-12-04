@@ -38,6 +38,14 @@ export class AccountsService extends AbstractCrudService<Account> {
     });
   }
 
+  findOneByEmail(email: string) {
+    return this.db.account.findUnique({
+      where: {
+        email,
+      },
+    });
+  }
+
   async create(data: CreateAccountDto) {
     return this.db.account.create({
       data: {

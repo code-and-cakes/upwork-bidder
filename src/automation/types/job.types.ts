@@ -28,7 +28,7 @@ export interface Budget {
   };
 }
 
-interface ClientInfo {
+export interface ClientInfo {
   rating?: number;
   location: {
     country: string;

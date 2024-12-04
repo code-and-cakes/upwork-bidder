@@ -2,7 +2,7 @@ import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
 import { AccountsModule } from './accounts/accounts.module';
-// import { AutomationModule } from './automation/automation.module';
+import { AIModule } from './ai/ai.module';
 import { CasesModule } from './cases/cases.module';
 import { CompaniesModule } from './companies/companies.module';
 import { GlobalModule } from './global';
@@ -19,7 +19,6 @@ import { SkillsModule } from './skills/skills.module';
       load: [],
     }),
     GlobalModule,
-    // AutomationModule,
     JobsModule,
     CompaniesModule,
     AccountsModule,
@@ -27,6 +26,7 @@ import { SkillsModule } from './skills/skills.module';
     SandboxModule,
     SkillsModule,
     PromptTemplatesModule,
+    AIModule,
   ],
 })
 export class AppModule {

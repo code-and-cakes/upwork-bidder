@@ -9,4 +9,13 @@ export class PromptTemplatesService extends AbstractCrudService<PromptTemplate> 
   constructor(private readonly db: PrismaService) {
     super(db, 'PromptTemplate');
   }
+
+  findActive(companyId: Id): Promise<PromptTemplate> {
+    return this.db.promptTemplate.findFirst({
+      where: {
+        active: true,
+        companyId: companyId,
+      },
+    });
+  }
 }

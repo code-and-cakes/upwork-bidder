@@ -6,10 +6,10 @@ export const defaultSearchParams: JobSearchParams = {
   duration: [],
   budget: {
     hourly: {
-      min: 40,
+      min: 0,
     },
     fixed: {
-      min: 2000,
+      min: 0,
     },
   },
   paymentVerified: true,

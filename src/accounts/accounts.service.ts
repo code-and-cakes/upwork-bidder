@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Account } from '@prisma/client';
 
 import { PrismaService } from '../global';
@@ -44,7 +44,9 @@ export class AccountsService extends AbstractCrudService<Account> {
         where: { email },
       }) as Promise<Account>;
     } catch (e) {
-      throw new Error(`Couldn't find ${this.model} with email: ${email}`);
+      throw new BadRequestException(
+        `Couldn't find ${this.model} with email: ${email}`,
+      );
     }
   }
 

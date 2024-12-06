@@ -6,4 +6,5 @@ export enum OpenAIModels {
   GPT4oMini = 'gpt-4o-mini-2024-07-18',
   GPT4Turbo = 'gpt-4-turbo',
   o1Mini = 'o1-mini',
+  o1 = 'o1-preview',
 }

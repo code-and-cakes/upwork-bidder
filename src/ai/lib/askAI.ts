@@ -6,8 +6,8 @@ import { OpenAIModels } from '../models/open-ai';
 export async function askAI({
   system,
   user,
-  temperature = 0.2,
-  model = OpenAIModels.GPT4o,
+  temperature = 1,
+  model = OpenAIModels.o1,
   json,
 }: {
   system?: string;

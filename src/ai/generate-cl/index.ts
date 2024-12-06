@@ -53,9 +53,9 @@ export async function generateCL(d: Input): Promise<string> {
   writeToFile(prompt, 'cl-prompt.txt');
 
   const res = await askAI({
-    system: prompt,
-    temperature: 0.7,
-    model: OpenAIModels.GPT4Turbo,
+    user: prompt,
+    // temperature: 0.7,
+    model: OpenAIModels.o1,
   });
 
   writeToFile(res, 'cl-response.txt');

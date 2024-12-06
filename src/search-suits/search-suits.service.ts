@@ -50,6 +50,7 @@ export class SearchSuitsService {
   }
 
   findManyByCompany(companyId: Id): Promise<SearchSuit[]> {
+    console.log('companyId', companyId);
     return this.db.searchSuit.findMany({ where: { companyId } }) as any;
   }
 

@@ -16,8 +16,8 @@ Required Skills:
 ${d.skills.join(', ')}
 </required_skills>
 
-Client info:
+{Client info:
 <client_business_domain>
-Domain: ${d.client.company.domain}
-</client_business_domain>
+Domain: ${d.client?.company.domain || ''}
+</client_business_domain>}
 `;

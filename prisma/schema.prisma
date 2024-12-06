@@ -84,6 +84,9 @@ model Job {
   link      String @unique
   postedAt  DateTime
 
+  approved  Boolean @default(false)
+  applied   Boolean @default(false)
+
   data      Json
 
   account   Account @relation(fields: [accountId], references: [id])

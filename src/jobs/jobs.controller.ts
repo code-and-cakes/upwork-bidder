@@ -1,6 +1,16 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
+import { CreateJobsDto } from './dto/create-job.dto';
+import { JobsQueryDto } from './dto/jobs-query.dto';
 import { JobsService } from './jobs.service';
 
 @ApiTags('Jobs')
@@ -8,33 +18,28 @@ import { JobsService } from './jobs.service';
 export class JobsController {
   constructor(private readonly jobsService: JobsService) {}
 
-  @Get('account/:id')
-  findObyAccount(@Param('id') id: string) {
-    return this.jobsService.findManyByAccount(id);
+  @Get()
+  findMany(@Query() q: JobsQueryDto) {
+    return this.jobsService.findMany(q);
   }
 
-  // @Post()
-  // create(@Body() createJobDto: CreateJobDto) {
-  //   return this.jobsService.create(createJobDto);
-  // }
-  //
-  // @Get()
-  // findAll() {
-  //   return this.jobsService.findAll();
-  // }
-  //
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.jobsService.findOne(+id);
-  // }
-  //
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateJobDto: UpdateJobDto) {
-  //   return this.jobsService.update(+id, updateJobDto);
-  // }
-  //
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.jobsService.remove(+id);
-  // }
+  @Post('company/:id')
+  create(@Param('id') companyId: Id, @Body() d: CreateJobsDto) {
+    return this.jobsService.createMany(companyId, d.jobs as any);
+  }
+
+  @Post(':id/apply')
+  markApplied(@Param('id') id: Id) {
+    return this.jobsService.markApplied(id);
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.jobsService.findOne(id);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.jobsService.remove(id);
+  }
 }

@@ -39,13 +39,13 @@ export class AccountsService extends AbstractCrudService<Account> {
   }
 
   async findOneByEmail(email: string) {
-    const res = await this.db.account.findUnique({
-      where: {
-        email,
-      },
-    });
-
-    return res;
+    try {
+      return this.prisma[this.model].findUniqueOrThrow({
+        where: { email },
+      }) as Promise<Account>;
+    } catch (e) {
+      throw new Error(`Couldn't find ${this.model} with email: ${email}`);
+    }
   }
 
   async create(data: CreateAccountDto) {

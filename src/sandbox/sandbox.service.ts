@@ -55,11 +55,16 @@ export class SandboxService {
     const cases = await this.casesService.findMany({ companyId });
     const template = await this.ptService.findOne(templateId);
 
-    return defineBestCases({
+    const selectedIds = await defineBestCases({
       cases,
       job,
       template,
     });
+
+    return cases
+      .filter((i) => selectedIds.includes(i.id))
+      .map((i) => i.name)
+      .join(', ');
   }
 
   async defineBestAccount(d: DefineBestCasesDto) {
@@ -69,10 +74,14 @@ export class SandboxService {
     const accounts = await this.accountsService.findAll(companyId);
     const template = await this.ptService.findOne(templateId);
 
-    return defineBestAccount({
+    const accountId = await defineBestAccount({
       job,
       template,
       accounts,
     });
+
+    const selectedAccount = accounts.find((i) => i.id === accountId);
+
+    return `${selectedAccount?.firstName} ${selectedAccount?.lastName}`;
   }
 }

@@ -55,16 +55,14 @@ export class SandboxService {
     const cases = await this.casesService.findMany({ companyId });
     const template = await this.ptService.findOne(templateId);
 
-    const selectedIds = await defineBestCases({
-      cases,
-      job,
-      template,
-    });
-
-    return cases
-      .filter((i) => selectedIds.includes(i.id))
-      .map((i) => i.name)
-      .join(', ');
+    return defineBestCases(
+      {
+        cases,
+        job,
+        template,
+      },
+      true,
+    );
   }
 
   async defineBestAccount(d: DefineBestCasesDto) {

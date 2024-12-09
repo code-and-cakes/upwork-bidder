@@ -16,7 +16,7 @@ export function parseTemplate(template: string, variables: object): string {
   }
 
   const extraKeys = Object.keys(variables).filter(
-    (key) => !template.includes(`\${${key}}`),
+    (key) => !template.includes(`{{${key}}}`),
   );
   if (extraKeys.length > 0) {
     console.warn(`Warning: Unused variables provided: ${extraKeys.join(', ')}`);

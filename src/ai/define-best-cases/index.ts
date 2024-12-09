@@ -20,15 +20,18 @@ function formatTemplate(
   return parseTemplate(template.value, context);
 }
 
-export async function defineBestCases({
-  cases,
-  job,
-  template,
-}: {
-  cases: Case[];
-  job: JobDetails;
-  template: PromptTemplate;
-}): Promise<string> {
+export async function defineBestCases(
+  {
+    cases,
+    job,
+    template,
+  }: {
+    cases: Case[];
+    job: JobDetails;
+    template: PromptTemplate;
+  },
+  names = false,
+): Promise<string> {
   const jobInfo = formatJobInfo(job);
 
   if (template.type !== 'CASE_SELECTION') {
@@ -46,8 +49,8 @@ export async function defineBestCases({
 
   const res = await askAI({
     user: prompt,
-    model: OpenAIModels.o1,
-    temperature: 1,
+    model: OpenAIModels.GPT4Turbo,
+    temperature: 0.2,
     json: true,
   });
 
@@ -58,10 +61,10 @@ export async function defineBestCases({
   }
 
   const bestCases = cases.filter((i) => caseNames.includes(i.name));
-  console.log(
-    'Best cases:',
-    bestCases.map((i) => i.name),
-  );
+
+  if (names) {
+    return bestCases.map((i) => i.name).join(', ');
+  }
 
   return simpleListFormat(bestCases.map((i) => i.data));
 }

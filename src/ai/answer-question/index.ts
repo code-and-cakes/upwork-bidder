@@ -1,5 +1,6 @@
 import { JobInfo } from '../../automation/types/job.types';
 import { Company } from '../../companies/types/company-data';
+import { getJobDetailsFromJobInfo } from '../../jobs/lib/getJobDetails';
 import { formatJobInfo } from '../generate-cl/templates/formatJobInfo';
 import { getCompanyInfo } from '../generate-cl/templates/getCompanyInfo';
 import { askAI } from '../lib/askAI';
@@ -14,7 +15,7 @@ interface Input {
 
 export async function answerQuestion(dto: Input): Promise<string> {
   const companyInfo = getCompanyInfo(dto.companyData);
-  const jobInfo = formatJobInfo(dto.jobData);
+  const jobInfo = formatJobInfo(getJobDetailsFromJobInfo(dto.jobData));
 
   const prompt = await answerQuestionPrompt.format({
     companyInfo,

@@ -1,32 +1,52 @@
-import { JobInfo } from '../../automation/types/job.types';
+import { PromptTemplate } from '@prisma/client';
+
+import { JobDetails } from '../../automation/types/job.types';
 import { Case } from '../../cases/types/case.types';
+import { parseTemplate } from '../../shared/lib/parseTemplate';
 import { simpleListFormat } from '../../shared/lib/simpleListFormat';
 import { formatJobInfo } from '../generate-cl/templates/formatJobInfo';
 import { askAI } from '../lib/askAI';
 import { OpenAIModels } from '../models/open-ai';
-import { defineBestCasesPrompt } from './prompt';
+
+interface DefineBestCasesContext {
+  job: string;
+  cases: string;
+}
+
+function formatTemplate(
+  template: PromptTemplate,
+  context: DefineBestCasesContext,
+): string {
+  return parseTemplate(template.value, context);
+}
 
 export async function defineBestCases({
   cases,
-  jobData,
+  job,
+  template,
 }: {
   cases: Case[];
-  jobData: JobInfo;
+  job: JobDetails;
+  template: PromptTemplate;
 }): Promise<string> {
-  const jobInfo = formatJobInfo(jobData);
+  const jobInfo = formatJobInfo(job);
+
+  if (template.type !== 'CASE_SELECTION') {
+    throw new Error('Invalid template type');
+  }
 
   const casesList = cases
     .map((i) => JSON.stringify(i.data, null, 2))
     .join('\n---\n');
 
-  const prompt = await defineBestCasesPrompt.format({
-    jobInfo,
-    casesList,
+  const prompt = formatTemplate(template, {
+    job: jobInfo,
+    cases: casesList,
   });
 
   const res = await askAI({
     system: prompt,
-    model: OpenAIModels.GPT4oMini,
+    model: OpenAIModels.o1,
     temperature: 0.2,
     json: true,
   });

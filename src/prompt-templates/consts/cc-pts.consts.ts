@@ -7,4 +7,5 @@ export const CC_PROMPT_TEMPLATE_V1: Dto<PromptTemplate> = {
   active: true,
   companyId: null,
   value: CC_PROMPT_TEMPLATE_V1_VALUE,
+  type: 'COVER_LETTER',
 };

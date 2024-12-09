@@ -5,8 +5,9 @@ import { AccountsService } from '../accounts/accounts.service';
 import { defineBestAccount } from '../ai/define-best-account';
 import { getHTMLFromUrl } from '../automation/lib/getHTMLFromUrl';
 import { parseJobInfo } from '../automation/lib/parseJobInfo';
-import { JobInfo } from '../automation/types/job.types';
+import { JobDetails, JobInfo } from '../automation/types/job.types';
 import { PrismaService } from '../global';
+import { PromptTemplatesService } from '../prompt-templates/prompt-templates.service';
 import { AbstractCrudService } from '../shared/classes/abstract-crud.service';
 import { JobsQueryDto } from './dto/jobs-query.dto';
 import { Job } from './types/job.types';
@@ -16,6 +17,7 @@ export class JobsService extends AbstractCrudService<Job> {
   constructor(
     private db: PrismaService,
     private readonly accountsService: AccountsService,
+    private readonly ptService: PromptTemplatesService,
   ) {
     super(db, 'Job');
   }
@@ -58,6 +60,16 @@ export class JobsService extends AbstractCrudService<Job> {
     );
   }
 
+  async getDetails(id: Id): Promise<JobDetails> {
+    const job = await this.findOne(id);
+
+    return {
+      title: job.title,
+      description: job.data.description,
+      skills: job.data.skills,
+    };
+  }
+
   private async createWithAccount(
     data: Omit<Dto<Job>, 'accountId'>,
     accounts: Account[],
@@ -73,11 +85,15 @@ export class JobsService extends AbstractCrudService<Job> {
       return existingJob as Job;
     }
 
-    console.log('Creating job:', data.title);
+    const template = await this.ptService.findActive(
+      companyId,
+      'ACCOUNT_SELECTION',
+    );
 
     const accountId = await defineBestAccount({
-      jobData: data as Job,
+      job: data as Job,
       accounts,
+      template,
     });
 
     return this.create({ ...data, accountId, companyId });

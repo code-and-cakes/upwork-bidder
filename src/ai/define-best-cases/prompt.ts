@@ -6,11 +6,11 @@ Take into account job industry, skills, and other info you see fit.
 The output should be a json object of the following format: {{ "cases": ["caseName1", "caseName2"] }}
 
 <job_proposal>
-{jobInfo}
+{job}
 </job_proposal>
 
 <company_info>
-{casesList}
+{cases}
 </company_info>
 
 Answer:`,

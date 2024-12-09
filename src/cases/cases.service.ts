@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { PrismaService } from '../global';
 import { AbstractCrudService } from '../shared/classes/abstract-crud.service';
+import { CasesQueryDto } from './dto/cases-query.dto';
 import { Case, SheetCase } from './types/case.types';
 
 @Injectable()
@@ -24,5 +25,11 @@ export class CasesService extends AbstractCrudService<Case> {
       })),
     });
     return this.findAll();
+  }
+
+  async findMany(d: CasesQueryDto): Promise<Case[]> {
+    return this.db.case.findMany({
+      where: d,
+    }) as any;
   }
 }

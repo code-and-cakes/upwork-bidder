@@ -10,11 +10,15 @@ export class PromptTemplatesService extends AbstractCrudService<PromptTemplate> 
     super(db, 'PromptTemplate');
   }
 
-  findActive(companyId: Id): Promise<PromptTemplate> {
+  findActive(
+    companyId: Id,
+    type: PromptTemplate['type'],
+  ): Promise<PromptTemplate> {
     return this.db.promptTemplate.findFirst({
       where: {
         active: true,
         companyId: companyId,
+        type: type,
       },
     });
   }

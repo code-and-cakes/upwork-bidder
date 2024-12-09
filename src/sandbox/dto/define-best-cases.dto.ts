@@ -1,11 +1,8 @@
 import { IsUUID } from 'class-validator';
 
-export class GenerateClDto {
+export class DefineBestCasesDto {
   @IsUUID()
   companyId: Id;
-
-  @IsUUID()
-  accountId: Id;
 
   @IsUUID()
   templateId: Id;

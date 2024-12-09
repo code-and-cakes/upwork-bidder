@@ -1,41 +1,50 @@
-import { Account } from '@prisma/client';
+import { Account, PromptTemplate } from '@prisma/client';
 
-import { JobInfo } from '../../automation/types/job.types';
+import { getJobDetailsFromJob } from '../../jobs/lib/getJobDetails';
 import { Job } from '../../jobs/types/job.types';
+import { parseTemplate } from '../../shared/lib/parseTemplate';
 import { simpleListFormat } from '../../shared/lib/simpleListFormat';
 import { formatJobInfo } from '../generate-cl/templates/formatJobInfo';
 import { askAI } from '../lib/askAI';
 import { OpenAIModels } from '../models/open-ai';
 import { formatAccount } from './formatAccounts';
-import { defineBestAccountPrompt } from './prompt';
+
+interface DefineBestAccountContext {
+  job: string;
+  accounts: string;
+}
+
+function formatTemplate(
+  template: PromptTemplate,
+  context: DefineBestAccountContext,
+): string {
+  return parseTemplate(template.value, context);
+}
 
 export async function defineBestAccount(d: {
   accounts: Account[];
-  jobData: Job;
+  job: Job;
+  template: PromptTemplate;
 }): Promise<Id> {
-  const jobInfo = formatJobInfo({
-    description: d.jobData.data.description,
-    skills: d.jobData.data.skills,
-    title: d.jobData.title,
-  } as JobInfo);
+  if (d.template.type !== 'ACCOUNT_SELECTION') {
+    throw new Error('Invalid template type');
+  }
+
+  const job = formatJobInfo(getJobDetailsFromJob(d.job));
 
   const accounts = simpleListFormat(d.accounts, formatAccount);
 
-  const prompt = await defineBestAccountPrompt.format({
-    jobInfo,
+  const prompt = formatTemplate(d.template, {
+    job,
     accounts,
   });
 
-  console.log('Prompt:', prompt);
-
   const res = await askAI({
     system: prompt,
-    model: OpenAIModels.GPT4oMini,
+    model: OpenAIModels.o1,
     temperature: 0.7,
     json: true,
   });
-
-  console.log('Response:', res);
 
   return res?.id || null;
 }

@@ -37,3 +37,10 @@ export interface JobInfo {
   more30Hr?: boolean;
   questions: string[];
 }
+
+export interface JobDetails {
+  title: string;
+  description: string;
+  skills: string[];
+  domain?: string;
+}

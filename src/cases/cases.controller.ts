@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Query,
   UploadedFile,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
@@ -11,6 +12,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { FileUpload } from '../shared/decorators/uploadFile';
 import { parseCSV } from '../shared/lib/parseCSV';
 import { CasesService } from './cases.service';
+import { CasesQueryDto } from './dto/cases-query.dto';
 import { UploadCasesDto } from './dto/upload-cases.dto';
 import { Case, SheetCase } from './types/case.types';
 
@@ -31,8 +33,8 @@ export class CasesController {
   }
 
   @Get()
-  findAll() {
-    return this.casesService.findAll();
+  findAll(@Query() q: CasesQueryDto) {
+    return this.casesService.findMany(q);
   }
 
   @Get(':id')

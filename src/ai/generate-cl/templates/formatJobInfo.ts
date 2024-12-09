@@ -1,6 +1,6 @@
-import { JobInfo } from '../../../automation/types/job.types';
+import { JobDetails } from '../../../automation/types/job.types';
 
-export const formatJobInfo = (d: JobInfo) => `
+export const formatJobInfo = (d: JobDetails) => `
 Job Title: 
 <job_title>
 ${d.title}"
@@ -16,8 +16,8 @@ Required Skills:
 ${d.skills.join(', ')}
 </required_skills>
 
-{Client info:
+Client info:
 <client_business_domain>
-Domain: ${d.client?.company.domain || ''}
+Domain: ${d.domain || ''}
 </client_business_domain>}
 `;

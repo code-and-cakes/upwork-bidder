@@ -99,11 +99,20 @@ model Job {
   updatedAt DateTime @updatedAt
 }
 
+enum PromptType {
+  COVER_LETTER
+  ACCOUNT_SELECTION
+  CASE_SELECTION
+}
+
 model PromptTemplate {
   id    String @id @default(uuid())
 
   name  String @unique
+  temperature Decimal @default(0.7)
   value String
+
+  type  PromptType @default(COVER_LETTER)
 
   active Boolean? @default(true)
 

@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
 
 import { AccountsService } from '../accounts/accounts.service';
+import { JobDetails } from '../automation/types/job.types';
 import { CasesService } from '../cases/cases.service';
 import { CompaniesService } from '../companies/companies.service';
 import { PrismaService } from '../global';
+import { getJobDetailsFromJobInfo } from '../jobs/lib/getJobDetails';
 import { PromptTemplatesService } from '../prompt-templates/prompt-templates.service';
 import { GenerateCoverLetterDto } from './dto/generate-cover-letter.dto';
 import { generateCL } from './generate-cl';
@@ -21,17 +23,24 @@ export class AIService {
   async generateCoverLetter(d: GenerateCoverLetterDto) {
     const { accountId, companyId, jobInfo } = d;
 
-    const accountData = await this.accountsService.findOne(accountId);
+    const account = await this.accountsService.findOne(accountId);
     const cases = await this.casesService.findAll();
-    const companyData = await this.companyService.findOne(companyId);
-    const template = await this.ptService.findActive(companyId);
+    const company = await this.companyService.findOne(companyId);
+    const template = await this.ptService.findActive(companyId, 'COVER_LETTER');
+    const casesTemplate = await this.ptService.findActive(
+      companyId,
+      'CASE_SELECTION',
+    );
+
+    const job: JobDetails = getJobDetailsFromJobInfo(jobInfo);
 
     return generateCL({
       cases,
-      jobData: jobInfo,
-      accountData,
-      companyData,
+      job,
+      account,
+      company,
       template,
+      casesTemplate,
     });
   }
 }

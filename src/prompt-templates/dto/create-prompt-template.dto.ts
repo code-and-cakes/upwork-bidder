@@ -1,4 +1,5 @@
-import { IsBoolean, IsString, IsUUID } from 'class-validator';
+import { PromptType } from '@prisma/client';
+import { IsBoolean, IsEnum, IsString, IsUUID } from 'class-validator';
 
 export class CreatePromptTemplateDto {
   @IsString()
@@ -6,6 +7,9 @@ export class CreatePromptTemplateDto {
 
   @IsString()
   value: string;
+
+  @IsEnum(PromptType)
+  type: PromptType;
 
   @IsBoolean()
   active: boolean;

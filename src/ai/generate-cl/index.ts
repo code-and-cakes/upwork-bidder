@@ -1,6 +1,6 @@
 import { Account, Company, PromptTemplate } from '@prisma/client';
 
-import { JobInfo } from '../../automation/types/job.types';
+import { JobDetails } from '../../automation/types/job.types';
 import { Case } from '../../cases/types/case.types';
 import { parseTemplate } from '../../shared/lib/parseTemplate';
 import { writeToFile } from '../../shared/lib/write-to-file';
@@ -13,11 +13,12 @@ import { formatJobInfo } from './templates/formatJobInfo';
 import { getCompanyInfo } from './templates/getCompanyInfo';
 
 interface Input {
-  companyData: Company;
-  jobData: JobInfo;
-  accountData: Account;
+  company: Company;
+  job: JobDetails;
+  account: Account;
   cases: Case[];
   template: PromptTemplate;
+  casesTemplate: PromptTemplate;
 }
 
 interface CoverLetterContext {
@@ -36,11 +37,19 @@ function formatTemplate(
 }
 
 export async function generateCL(d: Input): Promise<string> {
-  const company = getCompanyInfo(d.companyData);
-  const job = formatJobInfo(d.jobData);
-  const cases = await defineBestCases({ cases: d.cases, jobData: d.jobData });
+  const company = getCompanyInfo(d.company);
+  const job = formatJobInfo(d.job);
+  const cases = await defineBestCases({
+    cases: d.cases,
+    job: d.job,
+    template: d.casesTemplate,
+  });
   const examples = clExamples;
-  const applicant = formatApplicantInfo(d.accountData);
+  const applicant = formatApplicantInfo(d.account);
+
+  if (d.template.type !== 'COVER_LETTER') {
+    throw new Error('Invalid template type');
+  }
 
   const prompt = formatTemplate(d.template, {
     company,

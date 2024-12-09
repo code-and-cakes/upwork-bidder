@@ -27,7 +27,8 @@ export async function askAI({
 
   try {
     const { content } = await openAI.invoke(messages, {
-      response_format: json ? { type: 'json_object' } : undefined,
+      response_format:
+        json && model !== OpenAIModels.o1 ? { type: 'json_object' } : undefined,
     });
 
     return json ? JSON.parse(content as string) : content;

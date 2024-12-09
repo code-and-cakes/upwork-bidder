@@ -1,7 +1,7 @@
 export function parseTemplate(template: string, variables: object): string {
   const missingKeys = [];
 
-  const result = template.replace(/\{(.*?)}/g, (_, key) => {
+  const result = template.replace(/{{(.*?)}}/g, (_, key) => {
     const trimmedKey = key.trim();
     if (variables.hasOwnProperty(trimmedKey)) {
       return variables[trimmedKey];

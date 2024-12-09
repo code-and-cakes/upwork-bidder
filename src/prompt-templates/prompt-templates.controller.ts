@@ -29,6 +29,7 @@ export class PromptTemplatesController {
 
   @Get()
   findAll(@Query() q: PromptTemplatesQueryDto) {
+    console.log('q', q);
     return this.promptTemplatesService.findMany(q);
   }
 

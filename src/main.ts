@@ -27,7 +27,7 @@ async function bootstrap() {
     swaggerOptions: { persistAuthorization: true },
   });
 
-  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
 
   const PORT = parseInt(process.env.PORT) ?? 8000;
   await app.listen(PORT, () => Logger.log(`Server started on port = ${PORT}`));

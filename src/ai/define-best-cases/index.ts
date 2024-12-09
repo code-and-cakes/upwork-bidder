@@ -47,7 +47,7 @@ export async function defineBestCases({
   const res = await askAI({
     system: prompt,
     model: OpenAIModels.o1,
-    temperature: 0.2,
+    temperature: 1,
     json: true,
   });
 

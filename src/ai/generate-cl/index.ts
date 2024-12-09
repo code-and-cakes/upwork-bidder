@@ -63,8 +63,8 @@ export async function generateCL(d: Input): Promise<string> {
 
   const res = await askAI({
     user: prompt,
-    // temperature: 0.7,
     model: OpenAIModels.o1,
+    temperature: 1,
   });
 
   writeToFile(res, 'cl-response.txt');

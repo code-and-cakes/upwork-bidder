@@ -42,7 +42,7 @@ export async function defineBestAccount(d: {
   const res = await askAI({
     system: prompt,
     model: OpenAIModels.o1,
-    temperature: 0.7,
+    temperature: 1,
     json: true,
   });
 

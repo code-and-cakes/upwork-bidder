@@ -3,6 +3,7 @@ import { PromptTemplate } from '@prisma/client';
 
 import { PrismaService } from '../global';
 import { AbstractCrudService } from '../shared/classes/abstract-crud.service';
+import { PromptTemplatesQueryDto } from './dto/prompt-templates-query.dto';
 
 @Injectable()
 export class PromptTemplatesService extends AbstractCrudService<PromptTemplate> {
@@ -20,6 +21,12 @@ export class PromptTemplatesService extends AbstractCrudService<PromptTemplate> 
         companyId: companyId,
         type: type,
       },
+    });
+  }
+
+  findMany(q: PromptTemplatesQueryDto) {
+    return this.db.promptTemplate.findMany({
+      where: q,
     });
   }
 }

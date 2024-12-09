@@ -6,10 +6,12 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { CreatePromptTemplateDto } from './dto/create-prompt-template.dto';
+import { PromptTemplatesQueryDto } from './dto/prompt-templates-query.dto';
 import { UpdatePromptTemplateDto } from './dto/update-prompt-template.dto';
 import { PromptTemplatesService } from './prompt-templates.service';
 
@@ -26,8 +28,8 @@ export class PromptTemplatesController {
   }
 
   @Get()
-  findAll() {
-    return this.promptTemplatesService.findAll();
+  findAll(@Query() q: PromptTemplatesQueryDto) {
+    return this.promptTemplatesService.findMany(q);
   }
 
   @Get(':id')

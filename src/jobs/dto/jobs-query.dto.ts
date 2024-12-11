@@ -15,4 +15,8 @@ export class JobsQueryDto {
   @IsBoolean()
   @Transform(({ value }) => value === 'true')
   applied?: boolean;
+
+  @IsOptional()
+  @IsUUID()
+  companyId?: Id;
 }

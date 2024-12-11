@@ -12,7 +12,7 @@ export class CasesService extends AbstractCrudService<Case> {
   }
 
   async upload(companyId: Id, cases: SheetCase[]): Promise<Case[]> {
-    await this.db.case.deleteMany();
+    await this.db.case.deleteMany({ where: { companyId } });
     await this.db.case.createMany({
       data: cases.map((c) => ({
         name: c.PROJECT,

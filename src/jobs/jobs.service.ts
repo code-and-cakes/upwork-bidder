@@ -22,13 +22,14 @@ export class JobsService extends AbstractCrudService<Job> {
     super(db, 'Job');
   }
   findMany(q: JobsQueryDto) {
-    const { accountId, approved, applied } = q;
+    const { accountId, approved, applied, companyId } = q;
 
     return this.db.job.findMany({
       where: {
         accountId,
         approved,
         applied,
+        companyId,
       },
     });
   }

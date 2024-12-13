@@ -1,7 +1,9 @@
 import { Transform } from 'class-transformer';
 import { IsBoolean, IsOptional, IsUUID } from 'class-validator';
 
-export class JobsQueryDto {
+import { PageOptionsDto } from '../../shared/dto/page-options.dto';
+
+export class JobsQueryDto extends PageOptionsDto {
   @IsOptional()
   @IsUUID()
   accountId?: Id;

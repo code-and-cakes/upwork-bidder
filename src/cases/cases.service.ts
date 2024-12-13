@@ -13,6 +13,13 @@ export class CasesService extends AbstractCrudService<Case> {
 
   async upload(companyId: Id, cases: SheetCase[]): Promise<Case[]> {
     await this.db.case.deleteMany({ where: { companyId } });
+
+    const duplicates = cases.filter(
+      (c, i) => cases.findIndex((c2) => c2.PROJECT === c.PROJECT) !== i,
+    );
+
+    console.log('Duplicates:', duplicates);
+
     await this.db.case.createMany({
       data: cases.map((c) => ({
         name: c.PROJECT,

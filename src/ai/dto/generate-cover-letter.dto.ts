@@ -1,3 +1,4 @@
+import { Type } from 'class-transformer';
 import { IsUUID, ValidateNested } from 'class-validator';
 
 import { JobInfoDto } from './job-info.dto';
@@ -10,5 +11,6 @@ export class GenerateCoverLetterDto {
   accountId: Id;
 
   @ValidateNested()
+  @Type(() => JobInfoDto)
   jobInfo: JobInfoDto;
 }

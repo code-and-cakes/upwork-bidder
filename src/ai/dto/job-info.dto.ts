@@ -8,7 +8,10 @@ import {
 } from '../../automation/types/job.types';
 
 export class JobInfoDto implements JobInfo {
+  @IsString()
   title: string;
+
+  @IsString()
   description: string;
 
   @IsString()

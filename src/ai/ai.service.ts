@@ -32,6 +32,8 @@ export class AIService {
       'CASE_SELECTION',
     );
 
+    console.log(jobInfo);
+
     const job: JobDetails = getJobDetailsFromJobInfo(jobInfo);
 
     return generateCL({

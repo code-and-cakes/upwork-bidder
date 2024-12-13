@@ -1,14 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Account } from '@prisma/client';
 
 import { AccountsService } from '../accounts/accounts.service';
 import { defineBestAccount } from '../ai/define-best-account';
-import { getHTMLFromUrl } from '../automation/lib/getHTMLFromUrl';
-import { parseJobInfo } from '../automation/lib/parseJobInfo';
-import { JobDetails, JobInfo } from '../automation/types/job.types';
+import { JobDetails } from '../automation/types/job.types';
 import { PrismaService } from '../global';
 import { PromptTemplatesService } from '../prompt-templates/prompt-templates.service';
 import { AbstractCrudService } from '../shared/classes/abstract-crud.service';
+import { PageDto } from '../shared/dto/page.dto';
+import { PageMetaDto } from '../shared/dto/page-meta.dto';
 import { JobsQueryDto } from './dto/jobs-query.dto';
 import { Job } from './types/job.types';
 
@@ -21,36 +21,34 @@ export class JobsService extends AbstractCrudService<Job> {
   ) {
     super(db, 'Job');
   }
-  findMany(q: JobsQueryDto) {
-    const { accountId, approved, applied, companyId } = q;
 
-    return this.db.job.findMany({
+  async findOne(id: Id): Promise<Job> {
+    return this.db.job.findUniqueOrThrow({ where: { id } }).catch(() => {
+      throw new BadRequestException('Job not found');
+    }) as unknown as Job;
+  }
+
+  async findMany(q: JobsQueryDto) {
+    const { accountId, approved, applied, companyId, take, skip, order } = q;
+
+    const jobs = await this.db.job.findMany({
       where: {
         accountId,
         approved,
         applied,
         companyId,
       },
+      skip,
+      take,
+      orderBy: { createdAt: order },
     });
-  }
 
-  async getInfoByUpworkId(upworkId: string): Promise<JobInfo> {
-    const html = await getHTMLFromUrl(
-      `https://www.upwork.com/jobs/~${upworkId}`,
-    );
-
-    return parseJobInfo(html);
-  }
-
-  markApplied(id: Id) {
-    return this.db.job.update({
-      where: {
-        id,
-      },
-      data: {
-        applied: true,
-      },
+    const itemCount = await this.db.job.count({
+      where: { accountId, approved, applied, companyId },
     });
+
+    const pageMetaDto = new PageMetaDto({ pageOptionsDto: q, itemCount });
+    return new PageDto(jobs, pageMetaDto);
   }
 
   async createMany(companyId: Id, jobs: Dto<Job>[]): Promise<Job[]> {
@@ -98,5 +96,16 @@ export class JobsService extends AbstractCrudService<Job> {
     });
 
     return this.create({ ...data, accountId, companyId });
+  }
+
+  markApplied(id: Id) {
+    return this.db.job.update({
+      where: {
+        id,
+      },
+      data: {
+        applied: true,
+      },
+    });
   }
 }

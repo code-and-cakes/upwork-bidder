@@ -21,6 +21,8 @@ export class SearchSuitsService {
         keywords: d.keywords,
         paymentVerified: true,
         locations: d.locations,
+        expert: d.expert,
+        excludeKeywords: d.excludeKeywords,
       },
     };
 
@@ -40,6 +42,8 @@ export class SearchSuitsService {
         keywords: d.keywords,
         paymentVerified: true,
         locations: d.locations,
+        excludeKeywords: d.excludeKeywords,
+        expert: d.expert || false,
       },
     };
 
@@ -50,7 +54,6 @@ export class SearchSuitsService {
   }
 
   findManyByCompany(companyId: Id): Promise<SearchSuit[]> {
-    console.log('companyId', companyId);
     return this.db.searchSuit.findMany({ where: { companyId } }) as any;
   }
 

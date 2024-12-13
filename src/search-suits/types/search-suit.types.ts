@@ -6,6 +6,8 @@ export interface JobSearchParams {
   locations?: Location[];
   skills?: string[];
   keywords?: string[];
+  excludeKeywords?: string[];
+  expert?: boolean;
 
   // static
   duration?: JobDuration[];

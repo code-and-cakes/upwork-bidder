@@ -20,6 +20,8 @@ export const searchSuitMock: Dto<SearchSuit> = {
     },
     paymentVerified: true,
     keywords: ['react', 'typescript'],
+    excludeKeywords: ['angular'],
+    expert: true,
   },
   companyId: undefined,
 };

@@ -56,4 +56,10 @@ export class CreateSearchSuitDto {
 
   @IsString({ each: true })
   keywords: string[];
+
+  @IsString({ each: true })
+  excludeKeywords: string[];
+
+  @IsBoolean()
+  expert: boolean;
 }

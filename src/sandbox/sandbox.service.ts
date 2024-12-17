@@ -30,7 +30,7 @@ export class SandboxService {
     const job = await this.jobsService.getDetails(jobId);
 
     const account = await this.accountsService.findOne(accountId);
-    const cases = await this.casesService.findAll();
+    const cases = await this.casesService.findMany({ companyId });
     const company = await this.companyService.findOne(companyId);
     const template = await this.ptService.findOne(templateId);
     const casesTemplate = await this.ptService.findActive(

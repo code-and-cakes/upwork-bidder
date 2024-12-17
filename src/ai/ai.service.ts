@@ -24,7 +24,9 @@ export class AIService {
     const { accountId, companyId, jobInfo } = d;
 
     const account = await this.accountsService.findOne(accountId);
-    const cases = await this.casesService.findAll();
+    const cases = await this.casesService.findMany({
+      companyId,
+    });
     const company = await this.companyService.findOne(companyId);
     const template = await this.ptService.findActive(companyId, 'COVER_LETTER');
     const casesTemplate = await this.ptService.findActive(

@@ -1,8 +1,11 @@
 import { Type } from 'class-transformer';
-import { ValidateNested } from 'class-validator';
+import { IsString, ValidateNested } from 'class-validator';
 
 class QA {
+  @IsString()
   question: string;
+
+  @IsString()
   answer: string;
 }
 

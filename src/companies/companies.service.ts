@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { PrismaService } from '../global';
+import { QaService } from '../qa/qa.service';
 import { AbstractCrudService } from '../shared/classes/abstract-crud.service';
 import { SkillsService } from '../skills/skills.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
@@ -12,6 +13,7 @@ export class CompaniesService extends AbstractCrudService<Company> {
   constructor(
     private readonly db: PrismaService,
     private readonly skillsService: SkillsService,
+    private readonly qaService: QaService,
   ) {
     super(db, 'Company');
   }
@@ -36,7 +38,7 @@ export class CompaniesService extends AbstractCrudService<Company> {
   }
 
   async create(data: CreateCompanyDto) {
-    return this.db.company.create({
+    const company = (await this.db.company.create({
       data: {
         ...data,
         skills: {
@@ -46,7 +48,11 @@ export class CompaniesService extends AbstractCrudService<Company> {
       include: {
         skills: true,
       },
-    }) as any as Promise<Company>;
+    })) as any as Company;
+
+    await this.qaService.create(company.id);
+
+    return company;
   }
 
   async update(id: Id, data: UpdateCompanyDto) {

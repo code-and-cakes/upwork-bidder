@@ -6,5 +6,6 @@ import { QaService } from './qa.service';
 @Module({
   controllers: [QaController],
   providers: [QaService],
+  exports: [QaService],
 })
 export class QaModule {}

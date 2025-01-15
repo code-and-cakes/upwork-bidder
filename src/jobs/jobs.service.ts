@@ -69,6 +69,17 @@ export class JobsService extends AbstractCrudService<Job> {
     };
   }
 
+  async approve(id: Id) {
+    return this.db.job.update({
+      where: {
+        id,
+      },
+      data: {
+        approved: true,
+      },
+    });
+  }
+
   private async createWithAccount(
     data: Omit<Dto<Job>, 'accountId'>,
     accounts: Account[],

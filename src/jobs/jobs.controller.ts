@@ -28,6 +28,11 @@ export class JobsController {
     return this.jobsService.createMany(companyId, d.jobs as any);
   }
 
+  @Post(':id/approve')
+  approve(@Param('id') id: Id) {
+    return this.jobsService.approve(id);
+  }
+
   @Post(':id/apply')
   markApplied(@Param('id') id: Id) {
     return this.jobsService.markApplied(id);

@@ -7,7 +7,7 @@ export const searchSuitMock: Dto<SearchSuit> = {
   name: 'Test Search Suit',
   active: true,
   value: {
-    locations: [Location.uae, Location.usa],
+    locations: [Location.UnitedArabEmirates, Location.UnitedStates],
     skills: [Skill.react, Skill.js, Skill.ts],
     duration: [JobDuration.short, JobDuration.medium, JobDuration.long],
     budget: {

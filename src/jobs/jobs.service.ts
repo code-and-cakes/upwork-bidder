@@ -69,13 +69,13 @@ export class JobsService extends AbstractCrudService<Job> {
     };
   }
 
-  async approve(id: Id) {
+  async approve(id: Id, value: boolean) {
     return this.db.job.update({
       where: {
         id,
       },
       data: {
-        approved: true,
+        approved: value,
       },
     });
   }

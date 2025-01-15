@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
+import { ApproveJobDto } from './dto/approve-job.dto';
 import { CreateJobsDto } from './dto/create-job.dto';
 import { JobsQueryDto } from './dto/jobs-query.dto';
 import { JobsService } from './jobs.service';
@@ -29,8 +30,8 @@ export class JobsController {
   }
 
   @Post(':id/approve')
-  approve(@Param('id') id: Id) {
-    return this.jobsService.approve(id);
+  approve(@Param('id') id: Id, @Body() d: ApproveJobDto) {
+    return this.jobsService.approve(id, d.value);
   }
 
   @Post(':id/apply')

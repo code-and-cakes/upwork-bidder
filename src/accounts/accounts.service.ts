@@ -16,10 +16,11 @@ export class AccountsService extends AbstractCrudService<Account> {
     super(db, 'Account');
   }
 
-  findAll(companyId?: Id) {
+  findAll(companyId?: Id, active?: boolean) {
     return this.db.account.findMany({
       where: {
         companyId,
+        isActive: active,
       },
       include: {
         skills: true,

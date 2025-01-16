@@ -11,6 +11,8 @@ model Account {
   id    String @id @default(uuid())
   email String @unique
 
+  isActive Boolean @default(false)
+
   firstName String
   lastName  String
 

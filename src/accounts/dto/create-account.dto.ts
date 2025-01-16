@@ -1,5 +1,5 @@
 import { Account } from '@prisma/client';
-import { IsEmail, IsString, IsUUID } from 'class-validator';
+import { IsBoolean, IsEmail, IsString, IsUUID } from 'class-validator';
 
 export class CreateAccountDto implements Dto<Account> {
   @IsUUID()
@@ -22,6 +22,9 @@ export class CreateAccountDto implements Dto<Account> {
 
   @IsString()
   githubId: string;
+
+  @IsBoolean()
+  isActive: boolean;
 
   @IsString({ each: true })
   skills: Id[];

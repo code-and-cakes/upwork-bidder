@@ -69,7 +69,7 @@ export class SandboxService {
     const { companyId, templateId, jobId } = d;
 
     const job = await this.jobsService.findOne(jobId);
-    const accounts = await this.accountsService.findAll(companyId);
+    const accounts = await this.accountsService.findAll(companyId, true);
     const template = await this.ptService.findOne(templateId);
 
     const accountId = await defineBestAccount({

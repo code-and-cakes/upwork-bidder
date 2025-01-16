@@ -133,7 +133,7 @@ model SearchSuit {
   name  String @unique
   active Boolean @default(true)
 
-  value Json
+  link  String? @default("")
 
   companyId String
   company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)

@@ -17,12 +17,12 @@ model Account {
   lastName  String
 
   title    String
-  githubId  String @unique
+  githubId String @unique
 
-  skills   Skill[]
+  skills      Skill[]
   description String
 
-  jobs      Job[]
+  jobs Job[]
 
   companyId String
   company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
@@ -32,24 +32,24 @@ model Account {
 }
 
 model Company {
-  id    String @id @default(uuid())
+  id String @id @default(uuid())
 
-  name  String @unique
-  moto  String?
+  name String  @unique
+  moto String?
 
   services Json
-  skills Skill[]
+  skills   Skill[]
   overview String
 
   website String
 
-  jobs Job[]
-  cases Case[]
-  accounts Account[]
-  searchSuits SearchSuit[]
+  jobs            Job[]
+  cases           Case[]
+  accounts        Account[]
+  searchSuits     SearchSuit[]
   promptTemplates PromptTemplate[] @relation(name: "templates")
 
-  qa QA?
+  qa       QA?
   examples Examples?
 
   updatedAt DateTime @updatedAt
@@ -57,42 +57,42 @@ model Company {
 }
 
 model Case {
-  id    String @id @default(uuid())
+  id String @id @default(uuid())
 
-  name  String
-  duration String
-  market String
-  industry String
+  name        String
+  duration    String
+  market      String
+  industry    String
   description String
 
   data Json
 
   companyId String
-  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Skill {
-  id    String @id
-  name  String @unique
+  id   String @id
+  name String @unique
 
-  accounts Account[]
+  accounts  Account[]
   companies Company[]
 }
 
 model Job {
-  id        String @id @default(uuid())
+  id String @id @default(uuid())
 
-  title     String
-  link      String @unique
-  postedAt  DateTime
+  title    String
+  link     String   @unique
+  postedAt DateTime
 
-  approved  Boolean @default(false)
-  applied   Boolean @default(false)
+  approved Boolean @default(false)
+  applied  Boolean @default(false)
 
-  data      Json
+  data Json
 
   account   Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
   accountId String
@@ -108,15 +108,29 @@ enum PromptType {
   COVER_LETTER
   ACCOUNT_SELECTION
   CASE_SELECTION
+  APPROVE_JOB
+  ANSWER_QUESTION
+}
+
+enum OpenAIModel {
+  GPT35_TURBO
+  GPT4_TURBO
+  GPT4O
+  GPT4O_MINI
+  O1
+  O1_MINI
 }
 
 model PromptTemplate {
-  id    String @id @default(uuid())
+  id String @id @default(uuid())
 
   name  String @unique
   value String
 
-  type  PromptType @default(COVER_LETTER)
+  model       OpenAIModel @default(GPT4_TURBO)
+  temperature Float       @default(0.7)
+
+  type PromptType @default(COVER_LETTER)
 
   active Boolean? @default(true)
 
@@ -128,12 +142,12 @@ model PromptTemplate {
 }
 
 model SearchSuit {
-  id    String @id @default(uuid())
+  id String @id @default(uuid())
 
-  name  String @unique
+  name   String  @unique
   active Boolean @default(true)
 
-  link  String? @default("")
+  link String? @default("")
 
   companyId String
   company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
@@ -143,11 +157,11 @@ model SearchSuit {
 }
 
 model QA {
-  id    String @id @default(uuid())
+  id String @id @default(uuid())
 
-  data  Json
+  data Json
 
-  companyId String @unique
+  companyId String  @unique
   company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
@@ -155,11 +169,11 @@ model QA {
 }
 
 model Examples {
-  id    String @id @default(uuid())
+  id String @id @default(uuid())
 
-  data  Json
+  data Json
 
-  companyId String @unique
+  companyId String  @unique
   company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())

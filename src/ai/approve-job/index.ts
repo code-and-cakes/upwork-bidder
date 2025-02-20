@@ -10,25 +10,23 @@ import { askAI } from '../lib/askAI';
 interface Input {
   company: Company;
   job: JobDetails;
-  question: string;
   template: PromptTemplate;
 }
 
-interface AnswerQuestionContext {
-  company: string;
+interface ApproveJobContext {
   job: string;
-  question: string;
+  company: string;
 }
 
 function formatTemplate(
   template: PromptTemplate,
-  context: AnswerQuestionContext,
+  context: ApproveJobContext,
 ): string {
   return parseTemplate(template.value, context);
 }
 
-export async function answerQuestion(d: Input): Promise<string> {
-  if (d.template.type !== 'ANSWER_QUESTION') {
+export async function approveJob(d: Input): Promise<boolean> {
+  if (d.template.type !== 'APPROVE_JOB') {
     throw new Error('Invalid template type');
   }
 
@@ -36,14 +34,16 @@ export async function answerQuestion(d: Input): Promise<string> {
   const job = formatJobInfo(d.job);
 
   const prompt = formatTemplate(d.template, {
-    company,
     job,
-    question: d.question,
+    company,
   });
 
-  return askAI({
-    system: prompt,
+  const res = await askAI({
+    user: prompt,
     model: d.template.model,
     temperature: d.template.temperature,
+    json: true,
   });
+
+  return res?.id || null;
 }

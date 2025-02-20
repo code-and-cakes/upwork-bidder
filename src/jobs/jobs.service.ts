@@ -1,9 +1,11 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { Account } from '@prisma/client';
+import { Account, PromptType } from '@prisma/client';
 
 import { AccountsService } from '../accounts/accounts.service';
+import { approveJob } from '../ai/approve-job';
 import { defineBestAccount } from '../ai/define-best-account';
 import { JobDetails } from '../automation/types/job.types';
+import { CompaniesService } from '../companies/companies.service';
 import { PrismaService } from '../global';
 import { PromptTemplatesService } from '../prompt-templates/prompt-templates.service';
 import { AbstractCrudService } from '../shared/classes/abstract-crud.service';
@@ -18,6 +20,7 @@ export class JobsService extends AbstractCrudService<Job> {
     private db: PrismaService,
     private readonly accountsService: AccountsService,
     private readonly ptService: PromptTemplatesService,
+    private readonly companyService: CompaniesService,
   ) {
     super(db, 'Job');
   }
@@ -95,18 +98,50 @@ export class JobsService extends AbstractCrudService<Job> {
       return existingJob as Job;
     }
 
-    const template = await this.ptService.findActive(
+    const accountSelectionTemplate = await this.ptService.findActive(
       companyId,
-      'ACCOUNT_SELECTION',
+      PromptType.ACCOUNT_SELECTION,
     );
 
     const accountId = await defineBestAccount({
       job: data as Job,
       accounts,
-      template,
+      template: accountSelectionTemplate,
     });
 
-    return this.create({ ...data, accountId, companyId });
+    const job = await this.create({ ...data, accountId, companyId });
+
+    this.automatedApproveJob(job.id, companyId);
+
+    return job;
+  }
+
+  async automatedApproveJob(id: Id, companyId: Id) {
+    const approveJobTemplate = await this.ptService.findActive(
+      companyId,
+      PromptType.APPROVE_JOB,
+    );
+
+    if (!approveJobTemplate) {
+      console.log('No approve job template found');
+      return;
+    }
+
+    const job = await this.getDetails(id);
+
+    const company = await this.companyService.findOne(companyId);
+
+    const approved = await approveJob({
+      job,
+      template: approveJobTemplate,
+      company,
+    });
+
+    if (!approved) {
+      return;
+    }
+
+    return this.approve(id, true);
   }
 
   markApplied(id: Id) {

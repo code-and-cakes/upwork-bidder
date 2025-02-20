@@ -6,7 +6,6 @@ import { parseTemplate } from '../../shared/lib/parseTemplate';
 import { simpleListFormat } from '../../shared/lib/simpleListFormat';
 import { formatJobInfo } from '../generate-cl/templates/formatJobInfo';
 import { askAI } from '../lib/askAI';
-import { OpenAIModels } from '../models/open-ai';
 import { formatAccount } from './formatAccounts';
 
 interface DefineBestAccountContext {
@@ -41,8 +40,8 @@ export async function defineBestAccount(d: {
 
   const res = await askAI({
     user: prompt,
-    model: OpenAIModels.GPT4Turbo,
-    temperature: 0.2,
+    model: d.template.model,
+    temperature: d.template.temperature,
     json: true,
   });
 

@@ -1,5 +1,5 @@
-import { PromptType } from '@prisma/client';
-import { IsBoolean, IsEnum, IsString, IsUUID } from 'class-validator';
+import { OpenAIModel, PromptType } from '@prisma/client';
+import { IsBoolean, IsEnum, IsNumber, IsString, IsUUID } from 'class-validator';
 
 export class CreatePromptTemplateDto {
   @IsString()
@@ -16,4 +16,10 @@ export class CreatePromptTemplateDto {
 
   @IsUUID()
   companyId: string;
+
+  @IsNumber()
+  temperature: number;
+
+  @IsEnum(OpenAIModel)
+  model: OpenAIModel;
 }

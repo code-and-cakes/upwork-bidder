@@ -6,7 +6,6 @@ import { parseTemplate } from '../../shared/lib/parseTemplate';
 import { simpleListFormat } from '../../shared/lib/simpleListFormat';
 import { formatJobInfo } from '../generate-cl/templates/formatJobInfo';
 import { askAI } from '../lib/askAI';
-import { OpenAIModels } from '../models/open-ai';
 
 interface DefineBestCasesContext {
   job: string;
@@ -49,8 +48,8 @@ export async function defineBestCases(
 
   const res = await askAI({
     user: prompt,
-    model: OpenAIModels.GPT4Turbo,
-    temperature: 0.2,
+    model: template.model,
+    temperature: template.temperature,
     json: true,
   });
 

@@ -91,13 +91,11 @@ export class SandboxService {
     const template = await this.ptService.findOne(templateId);
     const company = await this.companyService.findOne(companyId);
 
-    const result = await approveJob({
+    return approveJob({
       job,
       template,
       company,
     });
-
-    return { result };
   }
 
   async qa(d: AutomatedQaDto) {

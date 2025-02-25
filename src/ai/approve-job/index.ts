@@ -38,10 +38,12 @@ export async function approveJob(d: Input): Promise<boolean> {
     company,
   });
 
-  return askAI({
+  const { result } = await askAI({
     user: prompt,
     model: d.template.model,
     temperature: d.template.temperature,
     json: true,
   });
+
+  return result;
 }

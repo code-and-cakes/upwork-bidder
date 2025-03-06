@@ -3,6 +3,7 @@ import { ChatOpenAI } from '@langchain/openai';
 import { OpenAIModel } from '@prisma/client';
 
 import { OpenAIModels } from '../models/open-ai';
+import { extractJsonFromCodeBlock } from './extractJsonFromCodeBlock';
 
 const ModelMap: Record<OpenAIModel, OpenAIModels> = {
   [OpenAIModel.GPT35_TURBO]: OpenAIModels.GPT35Turbo,
@@ -30,16 +31,23 @@ export async function askAI({
   if (system) messages.push(new SystemMessage(system));
   if (user) messages.push(new HumanMessage(user));
 
+  const isSpecial = (
+    [OpenAIModel.O1, OpenAIModel.O1_MINI] as OpenAIModel[]
+  ).includes(model);
+
   const openAI = new ChatOpenAI({
     model: ModelMap[model],
-    temperature,
+    temperature: !isSpecial ? temperature : undefined,
   });
 
   try {
     const { content } = await openAI.invoke(messages, {
-      response_format:
-        json && model !== OpenAIModel.O1 ? { type: 'json_object' } : undefined,
+      response_format: json && !isSpecial ? { type: 'json_object' } : undefined,
     });
+
+    if (isSpecial && json) {
+      return extractJsonFromCodeBlock(content as string);
+    }
 
     return json ? JSON.parse(content as string) : content;
   } catch (e) {

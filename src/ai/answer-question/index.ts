@@ -32,8 +32,6 @@ export async function answerQuestion(d: Input): Promise<string> {
     throw new Error('Invalid template type');
   }
 
-  console.log(d.template);
-
   const company = getCompanyInfo(d.company);
   const job = formatJobInfo(d.job);
 

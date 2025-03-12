@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Job" ADD COLUMN     "approvePercentage" DOUBLE PRECISION NOT NULL DEFAULT 0;

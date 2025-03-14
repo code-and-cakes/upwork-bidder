@@ -27,6 +27,23 @@ export interface ClientInfo {
   };
 }
 
+export interface ClientInfoForApproveJob {
+  clientCountry: string;
+  clientCity: string;
+  clientCompanyDomain: string;
+  clientCompanySize: string;
+  clientRating: number;
+  clientPaymentVerified: boolean;
+  clientJobsPostedNumber: string;
+  clientHireRate: string;
+  clientOpenJobs: string;
+  clientTotalHires: string;
+  clientTotalSpentNumber: string;
+  clientActiveHires: string;
+  clientHourlyRateNumber: string;
+  clientTotalHoursNumber: string;
+}
+
 export interface JobInfo {
   title: string;
   description: string;
@@ -43,4 +60,5 @@ export interface JobDetails {
   description: string;
   skills: string[];
   domain?: string;
+  client?: ClientInfoForApproveJob;
 }

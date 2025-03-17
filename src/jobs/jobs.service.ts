@@ -90,6 +90,7 @@ export class JobsService extends AbstractCrudService<Job> {
       title: job.title,
       description: job.data.description,
       skills: job.data.skills,
+      client: job.data.client,
     };
   }
 
@@ -117,7 +118,7 @@ export class JobsService extends AbstractCrudService<Job> {
     });
 
     if (existingJob) {
-      return existingJob as Job;
+      return existingJob as unknown as Job;
     }
 
     const accountSelectionTemplate = await this.ptService.findActive(

@@ -91,6 +91,7 @@ model Job {
 
   approved Boolean @default(false)
   applied  Boolean @default(false)
+  success  Boolean @default(false)
 
   data Json
 

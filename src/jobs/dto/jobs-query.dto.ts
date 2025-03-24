@@ -21,6 +21,12 @@ export class JobsQueryDto extends PageOptionsDto {
   @IsOptional()
   @IsBoolean()
   @Transform(({ value }) => value === 'true')
+  success?: boolean;
+
+  @ApiPropertyOptional({ enum: Bool })
+  @IsOptional()
+  @IsBoolean()
+  @Transform(({ value }) => value === 'true')
   applied?: boolean;
 
   @ApiPropertyOptional({ type: 'string', format: 'uuid' })

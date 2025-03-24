@@ -32,7 +32,16 @@ export class JobsService extends AbstractCrudService<Job> {
   }
 
   async findMany(q: JobsQueryDto) {
-    const { accountId, approved, applied, companyId, take, skip, order } = q;
+    const {
+      accountId,
+      approved,
+      applied,
+      companyId,
+      take,
+      skip,
+      order,
+      success,
+    } = q;
 
     const jobs = await this.db.job.findMany({
       where: {
@@ -40,6 +49,7 @@ export class JobsService extends AbstractCrudService<Job> {
         approved,
         applied,
         companyId,
+        success,
       },
       skip,
       take,
@@ -144,13 +154,14 @@ export class JobsService extends AbstractCrudService<Job> {
     return this.approve(id, true);
   }
 
-  markApplied(id: Id) {
+  markApplied(id: Id, success: boolean) {
     return this.db.job.update({
       where: {
         id,
       },
       data: {
         applied: true,
+        success,
       },
     });
   }

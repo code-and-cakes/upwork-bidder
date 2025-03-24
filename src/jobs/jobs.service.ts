@@ -41,7 +41,19 @@ export class JobsService extends AbstractCrudService<Job> {
       skip,
       order,
       success,
+      approvePercentage,
     } = q;
+
+    let approveRange = {};
+    if (approvePercentage !== undefined) {
+      if (approvePercentage <= 40) {
+        approveRange = { gte: 0, lte: 40 }; // 0-40
+      } else if (approvePercentage <= 80) {
+        approveRange = { gt: 40, lte: 80 }; // 40-80
+      } else {
+        approveRange = { gt: 80, lte: 100 }; // 80-100
+      }
+    }
 
     const jobs = await this.db.job.findMany({
       where: {
@@ -49,6 +61,7 @@ export class JobsService extends AbstractCrudService<Job> {
         approved,
         applied,
         companyId,
+        approvePercentage: approveRange,
         success,
       },
       skip,
@@ -79,16 +92,18 @@ export class JobsService extends AbstractCrudService<Job> {
       title: job.title,
       description: job.data.description,
       skills: job.data.skills,
+      client: job.data.client,
     };
   }
 
-  async approve(id: Id, value: boolean) {
+  async approve(id: Id, value: boolean, approvePercentage?: number) {
     return this.db.job.update({
       where: {
         id,
       },
       data: {
         approved: value,
+        approvePercentage: approvePercentage,
       },
     });
   }
@@ -105,7 +120,7 @@ export class JobsService extends AbstractCrudService<Job> {
     });
 
     if (existingJob) {
-      return existingJob as Job;
+      return existingJob as unknown as Job;
     }
 
     const accountSelectionTemplate = await this.ptService.findActive(
@@ -141,17 +156,19 @@ export class JobsService extends AbstractCrudService<Job> {
 
     const company = await this.companyService.findOne(companyId);
 
-    const approved = await approveJob({
+    const approvePercentage = await approveJob({
       job,
       template: approveJobTemplate,
       company,
     });
 
-    if (!approved) {
+    if (!approvePercentage) {
       return;
     }
 
-    return this.approve(id, true);
+    const isAutomatedApprove = approvePercentage >= 80;
+
+    return this.approve(id, isAutomatedApprove, approvePercentage);
   }
 
   markApplied(id: Id, success: boolean) {

@@ -25,7 +25,7 @@ function formatTemplate(
   return parseTemplate(template.value, context);
 }
 
-export async function approveJob(d: Input): Promise<boolean> {
+export async function approveJob(d: Input): Promise<number> {
   if (d.template.type !== 'APPROVE_JOB') {
     throw new Error('Invalid template type');
   }

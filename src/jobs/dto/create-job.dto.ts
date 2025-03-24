@@ -1,5 +1,69 @@
 import { Type } from 'class-transformer';
-import { IsEmpty, IsString, ValidateNested } from 'class-validator';
+import {
+  IsBoolean,
+  IsNumber,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
+
+class ClientInfoForApproveJob {
+  @IsOptional()
+  @IsString()
+  clientCountry?: string;
+
+  @IsOptional()
+  @IsString()
+  clientCity?: string;
+
+  @IsOptional()
+  @IsString()
+  clientCompanyDomain?: string;
+
+  @IsOptional()
+  @IsString()
+  clientCompanySize?: string;
+
+  @IsOptional()
+  @IsNumber()
+  clientRating?: number;
+
+  @IsOptional()
+  @IsBoolean()
+  clientPaymentVerified?: boolean;
+
+  @IsOptional()
+  @IsString()
+  clientJobsPostedNumber?: string;
+
+  @IsOptional()
+  @IsString()
+  clientHireRate?: string;
+
+  @IsOptional()
+  @IsString()
+  clientOpenJobs?: string;
+
+  @IsOptional()
+  @IsString()
+  clientTotalHires?: string;
+
+  @IsOptional()
+  @IsString()
+  clientTotalSpentNumber?: string;
+
+  @IsOptional()
+  @IsString()
+  clientActiveHires?: string;
+
+  @IsOptional()
+  @IsString()
+  clientHourlyRateNumber?: string;
+
+  @IsOptional()
+  @IsString()
+  clientTotalHoursNumber?: string;
+}
 
 class JobData {
   @IsString({ each: true })
@@ -7,6 +71,11 @@ class JobData {
 
   @IsString()
   description: string;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => ClientInfoForApproveJob)
+  client?: ClientInfoForApproveJob;
 }
 
 class CreateJobDto {
@@ -22,12 +91,6 @@ class CreateJobDto {
   @ValidateNested()
   @Type(() => JobData)
   data: JobData;
-
-  @IsEmpty()
-  accountId: Id;
-
-  @IsEmpty()
-  companyId: Id;
 }
 
 export class CreateJobsDto {

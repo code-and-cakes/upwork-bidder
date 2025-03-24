@@ -89,9 +89,10 @@ model Job {
   link     String   @unique
   postedAt DateTime
 
-  approved Boolean @default(false)
-  applied  Boolean @default(false)
-  success  Boolean @default(false)
+  approved          Boolean @default(false)
+  applied           Boolean @default(false)
+  success           Boolean @default(false)
+  approvePercentage Float   @default(0)
 
   data Json
 

@@ -33,4 +33,8 @@ export class JobsQueryDto extends PageOptionsDto {
   @IsOptional()
   @IsUUID()
   companyId?: Id;
+
+  @ApiPropertyOptional({ type: 'number' })
+  @IsOptional()
+  approvePercentage?: number;
 }

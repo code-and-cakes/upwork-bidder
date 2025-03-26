@@ -64,6 +64,14 @@ export class JobsService extends AbstractCrudService<Job> {
         approvePercentage: approveRange,
         success,
       },
+      include: {
+        account: {
+          select: {
+            id: true,
+            upworkId: true,
+          },
+        },
+      },
       skip,
       take,
       orderBy: { createdAt: order },

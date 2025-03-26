@@ -12,6 +12,9 @@ export class CreateAccountDto implements Dto<Account> {
   description: string;
 
   @IsString()
+  upworkId: string;
+
+  @IsString()
   title: string;
 
   @IsString()

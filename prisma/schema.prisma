@@ -15,6 +15,7 @@ model Account {
 
   firstName String
   lastName  String
+  upworkId  String @unique @default("")
 
   title    String
   githubId String @unique

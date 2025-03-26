@@ -41,6 +41,8 @@ export function parseJobs(html: string): Dto<Job>[] {
       approvePercentage: 0,
       applied: false,
       success: false,
+      viewed: false,
+      answered: false,
     });
   });
 

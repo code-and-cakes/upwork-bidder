@@ -91,6 +91,8 @@ model Job {
 
   approved          Boolean @default(false)
   applied           Boolean @default(false)
+  viewed            Boolean @default(false)
+  answered          Boolean @default(false)
   success           Boolean @default(false)
   approvePercentage Float   @default(0)
 

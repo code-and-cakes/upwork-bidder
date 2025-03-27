@@ -43,6 +43,7 @@ export function parseJobs(html: string): Dto<Job>[] {
       success: false,
       viewed: false,
       answered: false,
+      appliedAt: null,
     });
   });
 

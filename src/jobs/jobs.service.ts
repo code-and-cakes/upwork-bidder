@@ -11,7 +11,7 @@ import { PromptTemplatesService } from '../prompt-templates/prompt-templates.ser
 import { AbstractCrudService } from '../shared/classes/abstract-crud.service';
 import { PageDto } from '../shared/dto/page.dto';
 import { PageMetaDto } from '../shared/dto/page-meta.dto';
-import { JobsQueryDto } from './dto/jobs-query.dto';
+import { JobsQueryDto, JobStatus } from './dto/jobs-query.dto';
 import { UpdateJobsStatusDto } from './dto/update-jobs-status.dto';
 import { Job } from './types/job.types';
 
@@ -60,6 +60,7 @@ export class JobsService extends AbstractCrudService<Job> {
       order,
       success,
       approvePercentage,
+      status,
     } = q;
 
     let approveRange = {};
@@ -73,15 +74,24 @@ export class JobsService extends AbstractCrudService<Job> {
       }
     }
 
+    const whereCondition: any = {
+      accountId,
+      approved,
+      companyId,
+      approvePercentage: approveRange,
+      success,
+    };
+
+    if (status === JobStatus.APPLIED) {
+      whereCondition.applied = true;
+    } else {
+      if (status === JobStatus.VIEWED) whereCondition.viewed = true;
+      if (status === JobStatus.ANSWERED) whereCondition.answered = true;
+      if (applied !== undefined) whereCondition.applied = applied;
+    }
+
     const jobs = await this.db.job.findMany({
-      where: {
-        accountId,
-        approved,
-        applied,
-        companyId,
-        approvePercentage: approveRange,
-        success,
-      },
+      where: whereCondition,
       include: {
         account: {
           select: {
@@ -95,9 +105,7 @@ export class JobsService extends AbstractCrudService<Job> {
       orderBy: { createdAt: order },
     });
 
-    const itemCount = await this.db.job.count({
-      where: { accountId, approved, applied, companyId },
-    });
+    const itemCount = await this.db.job.count({ where: whereCondition });
 
     const pageMetaDto = new PageMetaDto({ pageOptionsDto: q, itemCount });
     return new PageDto(jobs, pageMetaDto);
@@ -205,6 +213,7 @@ export class JobsService extends AbstractCrudService<Job> {
       data: {
         applied: true,
         success,
+        appliedAt: new Date(),
       },
     });
   }

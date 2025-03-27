@@ -1,9 +1,15 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsBoolean, IsOptional, IsUUID } from 'class-validator';
+import { IsBoolean, IsEnum, IsOptional, IsUUID } from 'class-validator';
 
 import { Bool } from '../../shared/consts/common.consts';
 import { PageOptionsDto } from '../../shared/dto/page-options.dto';
+
+export enum JobStatus {
+  VIEWED = 'viewed',
+  ANSWERED = 'answered',
+  APPLIED = 'applied',
+}
 
 export class JobsQueryDto extends PageOptionsDto {
   @ApiPropertyOptional({ type: 'string', format: 'uuid' })
@@ -37,4 +43,9 @@ export class JobsQueryDto extends PageOptionsDto {
   @ApiPropertyOptional({ type: 'number' })
   @IsOptional()
   approvePercentage?: number;
+
+  @ApiPropertyOptional({ enum: JobStatus, enumName: 'JobStatus' })
+  @IsOptional()
+  @IsEnum(JobStatus)
+  status?: JobStatus;
 }

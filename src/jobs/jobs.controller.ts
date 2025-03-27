@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Query,
 } from '@nestjs/common';
@@ -13,6 +14,7 @@ import { ApplyJobDto } from './dto/apply-job.dto';
 import { ApproveJobDto } from './dto/approve-job.dto';
 import { CreateJobsDto } from './dto/create-job.dto';
 import { JobsQueryDto } from './dto/jobs-query.dto';
+import { UpdateJobsStatusDto } from './dto/update-jobs-status.dto';
 import { JobsService } from './jobs.service';
 
 @ApiTags('Jobs')
@@ -48,5 +50,10 @@ export class JobsController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.jobsService.remove(id);
+  }
+
+  @Patch('update-status')
+  updateStatusMany(@Body() data: UpdateJobsStatusDto) {
+    return this.jobsService.updateStatusMany(data);
   }
 }

@@ -12,6 +12,7 @@ import { AbstractCrudService } from '../shared/classes/abstract-crud.service';
 import { PageDto } from '../shared/dto/page.dto';
 import { PageMetaDto } from '../shared/dto/page-meta.dto';
 import { JobsQueryDto } from './dto/jobs-query.dto';
+import { UpdateJobsStatusDto } from './dto/update-jobs-status.dto';
 import { Job } from './types/job.types';
 
 @Injectable()
@@ -23,6 +24,23 @@ export class JobsService extends AbstractCrudService<Job> {
     private readonly companyService: CompaniesService,
   ) {
     super(db, 'Job');
+  }
+
+  // Update the status of multiple jobs
+  async updateStatusMany(data: UpdateJobsStatusDto) {
+    await Promise.all(
+      data.jobs.map((job) =>
+        this.db.job
+          .update({
+            where: { link: job.link },
+            data: {
+              viewed: job.viewed,
+              answered: job.answered,
+            },
+          })
+          .catch(),
+      ),
+    );
   }
 
   async findOne(id: Id): Promise<Job> {

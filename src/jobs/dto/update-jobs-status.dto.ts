@@ -3,7 +3,7 @@ import { IsBoolean, IsString, ValidateNested } from 'class-validator';
 
 export class UpdateJobStatusDto {
   @IsString()
-  name: string;
+  title: string;
 
   @IsBoolean()
   viewed: boolean;

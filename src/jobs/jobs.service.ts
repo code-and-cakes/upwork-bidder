@@ -31,7 +31,7 @@ export class JobsService extends AbstractCrudService<Job> {
     await Promise.all(
       data.jobs.map(async (job) => {
         const foundJob = await this.db.job.findFirst({
-          where: { title: job.name },
+          where: { title: job.title },
         });
 
         if (!foundJob) return;

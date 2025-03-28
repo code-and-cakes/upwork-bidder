@@ -29,17 +29,21 @@ export class JobsService extends AbstractCrudService<Job> {
   // Update the status of multiple jobs
   async updateStatusMany(data: UpdateJobsStatusDto) {
     await Promise.all(
-      data.jobs.map((job) =>
-        this.db.job
-          .update({
-            where: { link: job.link },
-            data: {
-              viewed: job.viewed,
-              answered: job.answered,
-            },
-          })
-          .catch(),
-      ),
+      data.jobs.map(async (job) => {
+        const foundJob = await this.db.job.findFirst({
+          where: { title: job.name },
+        });
+
+        if (!foundJob) return;
+
+        this.db.job.update({
+          where: { id: foundJob.id },
+          data: {
+            viewed: job.viewed,
+            answered: job.answered,
+          },
+        });
+      }),
     );
   }
 

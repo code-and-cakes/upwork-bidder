@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { PrismaService } from '../global';
+import { sendEmail } from '../global/lib/send-email';
 import { QaService } from '../qa/qa.service';
 import { AbstractCrudService } from '../shared/classes/abstract-crud.service';
 import { SkillsService } from '../skills/skills.service';
@@ -16,6 +17,15 @@ export class CompaniesService extends AbstractCrudService<Company> {
     private readonly qaService: QaService,
   ) {
     super(db, 'Company');
+  }
+
+  async notifyConnections() {
+    await sendEmail({
+      subject: 'Upwork Bidder. Out of Connections!',
+      text: 'We are out of connections',
+      to: process.env.NOTIFY_EMAIL,
+      from: process.env.SENDER_EMAIL,
+    });
   }
 
   async findAll() {

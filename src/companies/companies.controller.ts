@@ -42,4 +42,9 @@ export class CompaniesController {
   remove(@Param('id') id: string) {
     return this.companyService.remove(id);
   }
+
+  @Get(':id/notify/connections')
+  notifyConnections() {
+    return this.companyService.notifyConnections();
+  }
 }

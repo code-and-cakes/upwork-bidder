@@ -26,6 +26,7 @@ export const CC_COMPANY_DATA: Dto<Company> = {
     },
   ],
   website: 'https://codeandcakes.com/',
+  lastNotifiedConnections: new Date(),
   overview:
     '🥇We are a professional team of engineers capable of bringing the most daring product ideas to life. We are not just coders — we are engineers with a product vision and ownership mentality, so we treat each project as our own. Our clients are our partners, and together we are creating amazing things.\n' +
     '\n' +

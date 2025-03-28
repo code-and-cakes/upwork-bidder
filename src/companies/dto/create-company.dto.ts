@@ -1,4 +1,4 @@
-import { IsArray, IsString } from 'class-validator';
+import { IsArray, IsOptional, IsString } from 'class-validator';
 
 import { Company } from '../types/company-data';
 
@@ -20,4 +20,7 @@ export class CreateCompanyDto implements Dto<Company> {
 
   @IsArray()
   services: { name: string; description: string }[];
+
+  @IsOptional()
+  lastNotifiedConnections: Date;
 }

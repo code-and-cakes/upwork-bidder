@@ -19,13 +19,22 @@ export class CompaniesService extends AbstractCrudService<Company> {
     super(db, 'Company');
   }
 
-  async notifyConnections() {
-    await sendEmail({
-      subject: 'Upwork Bidder. Out of Connections!',
-      text: 'We are out of connections',
-      to: process.env.NOTIFY_EMAIL,
-      from: process.env.SENDER_EMAIL,
-    });
+  async notifyConnections(id: Id) {
+    const company = await this.findOne(id);
+
+    const sixHoursAgo = new Date();
+    sixHoursAgo.setHours(sixHoursAgo.getHours() - 6);
+
+    if (
+      !company.lastNotifiedConnections ||
+      company.lastNotifiedConnections < sixHoursAgo
+    )
+      await sendEmail({
+        subject: 'Upwork Bidder. Out of Connections!',
+        text: 'We are out of connections',
+        to: process.env.NOTIFY_EMAIL,
+        from: process.env.SENDER_EMAIL,
+      });
   }
 
   async findAll() {

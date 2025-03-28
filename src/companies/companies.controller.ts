@@ -44,7 +44,7 @@ export class CompaniesController {
   }
 
   @Get(':id/notify/connections')
-  notifyConnections() {
-    return this.companyService.notifyConnections();
+  notifyConnections(@Param('id') id: string) {
+    return this.companyService.notifyConnections(id);
   }
 }

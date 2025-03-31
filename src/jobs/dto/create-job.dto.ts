@@ -33,36 +33,36 @@ class ClientInfoForApproveJob {
   clientPaymentVerified?: boolean;
 
   @IsOptional()
-  @IsString()
-  clientJobsPostedNumber?: string;
+  @IsNumber()
+  clientJobsPostedNumber?: number;
 
   @IsOptional()
-  @IsString()
-  clientHireRate?: string;
+  @IsNumber()
+  clientHireRate?: number;
 
   @IsOptional()
-  @IsString()
-  clientOpenJobs?: string;
+  @IsNumber()
+  clientOpenJobs?: number;
 
   @IsOptional()
-  @IsString()
-  clientTotalHires?: string;
+  @IsNumber()
+  clientTotalHires?: number;
 
   @IsOptional()
-  @IsString()
-  clientTotalSpentNumber?: string;
+  @IsNumber()
+  clientTotalSpentNumber?: number;
 
   @IsOptional()
-  @IsString()
-  clientActiveHires?: string;
+  @IsNumber()
+  clientActiveHires?: number;
 
   @IsOptional()
-  @IsString()
-  clientHourlyRateNumber?: string;
+  @IsNumber()
+  clientHourlyRateNumber?: number;
 
   @IsOptional()
-  @IsString()
-  clientTotalHoursNumber?: string;
+  @IsNumber()
+  clientTotalHoursNumber?: number;
 }
 
 class JobData {

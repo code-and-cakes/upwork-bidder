@@ -61,7 +61,6 @@ export class JobsService extends AbstractCrudService<Job> {
       companyId,
       take,
       skip,
-      order,
       success,
       approvePercentage,
       status,
@@ -106,7 +105,7 @@ export class JobsService extends AbstractCrudService<Job> {
       },
       skip,
       take,
-      orderBy: { createdAt: order },
+      orderBy: { createdAt: 'desc' },
     });
 
     const itemCount = await this.db.job.count({ where: whereCondition });
